@@ -4,7 +4,22 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { ArrowLeft, Plus, Trash2, Sparkles, Luggage } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ArrowLeft,
+  Plus,
+  Trash2,
+  Sparkles,
+  Luggage,
+  FileText,
+  Shirt,
+  Zap,
+  Droplet,
+  HeartPulse,
+  Package,
+  PartyPopper,
+  Check,
+} from "lucide-react";
 import { tripsApi, packingApi } from "@/lib/api-client";
 import { LoadingSpinner, EmptyState } from "@/components/ui/Misc";
 import Button from "@/components/ui/Button";
@@ -17,6 +32,24 @@ const CATEGORY_LABELS: Record<string, string> = {
   TOILETRIES: "Toiletries",
   HEALTH: "Health",
   MISCELLANEOUS: "Miscellaneous",
+};
+
+const CATEGORY_ICONS: Record<string, typeof FileText> = {
+  DOCUMENTS: FileText,
+  CLOTHING: Shirt,
+  ELECTRONICS: Zap,
+  TOILETRIES: Droplet,
+  HEALTH: HeartPulse,
+  MISCELLANEOUS: Package,
+};
+
+const CATEGORY_TONES: Record<string, { bg: string; text: string; ring: string }> = {
+  DOCUMENTS: { bg: "bg-primary-50", text: "text-primary-600", ring: "ring-primary-200" },
+  CLOTHING: { bg: "bg-accent-50", text: "text-accent-600", ring: "ring-accent-200" },
+  ELECTRONICS: { bg: "bg-amber-50", text: "text-amber-600", ring: "ring-amber-200" },
+  TOILETRIES: { bg: "bg-sky-50", text: "text-sky-600", ring: "ring-sky-200" },
+  HEALTH: { bg: "bg-rose-50", text: "text-rose-600", ring: "ring-rose-200" },
+  MISCELLANEOUS: { bg: "bg-gray-100", text: "text-gray-500", ring: "ring-gray-200" },
 };
 
 const CATEGORY_ORDER = ["DOCUMENTS", "CLOTHING", "TOILETRIES", "ELECTRONICS", "HEALTH", "MISCELLANEOUS"];
@@ -33,6 +66,67 @@ const ESSENTIALS: { name: string; category: string }[] = [
   { name: "Underwear (per day)", category: "CLOTHING" },
   { name: "Comfortable walking shoes", category: "CLOTHING" },
 ];
+
+function ProgressRing({ pct }: { pct: number }) {
+  const size = 88;
+  const stroke = 8;
+  const radius = (size - stroke) / 2;
+  const circumference = 2 * Math.PI * radius;
+
+  return (
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="-rotate-90">
+        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="currentColor" strokeWidth={stroke} className="text-gray-100" />
+        <motion.circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          className={pct === 100 ? "text-emerald-500" : "text-primary-500"}
+          strokeDasharray={circumference}
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset: circumference - (pct / 100) * circumference }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        {pct === 100 ? (
+          <PartyPopper className="w-7 h-7 text-emerald-500" />
+        ) : (
+          <span className="text-lg font-bold text-gray-900">{pct}%</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function PackingCheckbox({ checked, onChange }: { checked: boolean; onChange: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onChange}
+      className={`relative w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
+        checked ? "bg-primary-600 border-primary-600" : "border-gray-300 hover:border-primary-400"
+      }`}
+    >
+      <AnimatePresence>
+        {checked && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            <Check className="w-3 h-3 text-white" strokeWidth={3} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </button>
+  );
+}
 
 export default function PackingListPage() {
   const { tripId } = useParams<{ tripId: string }>();
@@ -90,9 +184,13 @@ export default function PackingListPage() {
   }
 
   async function handleToggle(item: any) {
+    const wasComplete = pct === 100;
     setItems((prev) => prev.map((i) => (i.id === item.id ? { ...i, packed: !i.packed } : i)));
     try {
       await packingApi.update(tripId, item.id, { packed: !item.packed });
+      if (!wasComplete && packedCount + 1 === items.length && !item.packed) {
+        toast.success("Everything's packed! 🎉");
+      }
     } catch {
       toast.error("Failed to update item");
       setItems((prev) => prev.map((i) => (i.id === item.id ? { ...i, packed: item.packed } : i)));
@@ -135,7 +233,7 @@ export default function PackingListPage() {
           <ArrowLeft className="w-4 h-4" /> Back to itinerary
         </Link>
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-primary-50 text-primary-600 flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 text-white flex items-center justify-center shrink-0 shadow-soft">
             <Luggage className="w-5 h-5" />
           </div>
           <div>
@@ -146,20 +244,27 @@ export default function PackingListPage() {
       </div>
 
       {items.length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-          <div className="flex items-center justify-between text-sm mb-2">
-            <span className="font-semibold text-gray-700">
-              {packedCount} of {items.length} packed
-            </span>
-            <span className="font-bold text-primary-600">{pct}%</span>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`rounded-2xl border shadow-sm p-5 flex items-center gap-5 transition-colors ${
+            pct === 100
+              ? "bg-gradient-to-br from-emerald-50 to-primary-50 border-emerald-100"
+              : "bg-white border-gray-100"
+          }`}
+        >
+          <ProgressRing pct={pct} />
+          <div className="min-w-0">
+            <p className="font-bold text-gray-900">
+              {pct === 100 ? "Ready to go!" : `${packedCount} of ${items.length} packed`}
+            </p>
+            <p className="text-sm text-gray-500 mt-0.5">
+              {pct === 100
+                ? "Every item on your list is checked off."
+                : `${items.length - packedCount} item${items.length - packedCount === 1 ? "" : "s"} left to pack.`}
+            </p>
           </div>
-          <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
-            <div
-              className="h-full bg-primary-500 rounded-full transition-all duration-300"
-              style={{ width: `${pct}%` }}
-            />
-          </div>
-        </div>
+        </motion.div>
       )}
 
       <form onSubmit={handleAdd} className="flex flex-col sm:flex-row gap-2">
@@ -200,35 +305,58 @@ export default function PackingListPage() {
             </Button>
           </div>
           <div className="space-y-6">
-            {grouped.map(({ category, items: catItems }) => (
-              <div key={category}>
-                <h3 className="text-sm font-bold text-gray-700 mb-2">{CATEGORY_LABELS[category]}</h3>
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm divide-y divide-gray-50">
-                  {catItems.map((item) => (
-                    <div key={item.id} className="flex items-center gap-3 px-4 py-3 group">
-                      <input
-                        type="checkbox"
-                        checked={item.packed}
-                        onChange={() => handleToggle(item)}
-                        className="w-4.5 h-4.5 rounded border-gray-300 text-primary-600 focus:ring-primary-500 shrink-0"
-                      />
-                      <span
-                        className={`flex-1 text-sm ${item.packed ? "text-gray-400 line-through" : "text-gray-800"}`}
-                      >
-                        {item.name}
-                        {item.quantity > 1 && <span className="text-gray-400"> × {item.quantity}</span>}
-                      </span>
-                      <button
-                        onClick={() => handleDelete(item)}
-                        className="p-1.5 rounded-lg text-gray-300 hover:bg-red-50 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+            {grouped.map(({ category, items: catItems }, groupIndex) => {
+              const Icon = CATEGORY_ICONS[category];
+              const tone = CATEGORY_TONES[category];
+              const catPacked = catItems.filter((i) => i.packed).length;
+              return (
+                <motion.div
+                  key={category}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: groupIndex * 0.05 }}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className={`w-6 h-6 rounded-lg ${tone.bg} ${tone.text} flex items-center justify-center shrink-0`}>
+                      <Icon className="w-3.5 h-3.5" />
                     </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+                    <h3 className="text-sm font-bold text-gray-700">{CATEGORY_LABELS[category]}</h3>
+                    <span className="text-xs text-gray-400">
+                      {catPacked}/{catItems.length}
+                    </span>
+                  </div>
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm divide-y divide-gray-50 overflow-hidden">
+                    <AnimatePresence initial={false}>
+                      {catItems.map((item) => (
+                        <motion.div
+                          key={item.id}
+                          layout
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="flex items-center gap-3 px-4 py-3 group"
+                        >
+                          <PackingCheckbox checked={item.packed} onChange={() => handleToggle(item)} />
+                          <span
+                            className={`flex-1 text-sm transition-colors ${item.packed ? "text-gray-400 line-through" : "text-gray-800"}`}
+                          >
+                            {item.name}
+                            {item.quantity > 1 && <span className="text-gray-400"> × {item.quantity}</span>}
+                          </span>
+                          <button
+                            onClick={() => handleDelete(item)}
+                            className="p-1.5 rounded-lg text-gray-300 hover:bg-red-50 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </>
       )}
