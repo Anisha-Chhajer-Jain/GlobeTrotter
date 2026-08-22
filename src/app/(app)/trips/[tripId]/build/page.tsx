@@ -6,7 +6,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { DndContext, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
-import { Plus, ArrowLeft, Eye, Wallet, CalendarDays, Share2, Check, Loader2 } from "lucide-react";
+import { Plus, ArrowLeft, Eye, Wallet, CalendarDays, Share2, Check, Loader2, Luggage } from "lucide-react";
 import { tripsApi, stopsApi, tripActivitiesApi } from "@/lib/api-client";
 import { LoadingSpinner, EmptyState } from "@/components/ui/Misc";
 import Button from "@/components/ui/Button";
@@ -278,6 +278,11 @@ export default function TripBuilderPage() {
             <Link href={`/trips/${tripId}/budget`}>
               <Button variant="outline" size="sm">
                 <Wallet className="w-3.5 h-3.5" /> Budget
+              </Button>
+            </Link>
+            <Link href={`/trips/${tripId}/packing`}>
+              <Button variant="outline" size="sm">
+                <Luggage className="w-3.5 h-3.5" /> Packing
               </Button>
             </Link>
             <Link href={`/trips/${tripId}/share`}>

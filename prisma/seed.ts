@@ -202,6 +202,320 @@ async function main() {
       popularity: 80,
       costIndex: 60,
     },
+    {
+      name: "Singapore",
+      country: "Singapore",
+      description: "Ultra-modern city-state blending Gardens by the Bay futurism with hawker-stall food culture.",
+      imageUrl: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=800",
+      latitude: 1.3521,
+      longitude: 103.8198,
+      timezone: "Asia/Singapore",
+      currency: "SGD",
+      language: "English",
+      popularity: 89,
+      costIndex: 135,
+    },
+    {
+      name: "Seoul",
+      country: "South Korea",
+      description: "Neon-lit metropolis where centuries-old palaces sit beside K-pop culture and street food alleys.",
+      imageUrl: "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800",
+      latitude: 37.5665,
+      longitude: 126.978,
+      timezone: "Asia/Seoul",
+      currency: "KRW",
+      language: "Korean",
+      popularity: 87,
+      costIndex: 95,
+    },
+    {
+      name: "Kyoto",
+      country: "Japan",
+      description: "Japan's ancient capital, home to thousands of temples, geisha districts, and bamboo groves.",
+      imageUrl: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800",
+      latitude: 35.0116,
+      longitude: 135.7681,
+      timezone: "Asia/Tokyo",
+      currency: "JPY",
+      language: "Japanese",
+      popularity: 88,
+      costIndex: 120,
+    },
+    {
+      name: "Hong Kong",
+      country: "Hong Kong",
+      description: "Vertical harbor city famous for dim sum, skyline views, and a blend of East and West.",
+      imageUrl: "https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=800",
+      latitude: 22.3193,
+      longitude: 114.1694,
+      timezone: "Asia/Hong_Kong",
+      currency: "HKD",
+      language: "Cantonese",
+      popularity: 86,
+      costIndex: 130,
+    },
+    {
+      name: "Mumbai",
+      country: "India",
+      description: "India's financial capital — colonial architecture, Bollywood glamour, and Marine Drive sunsets.",
+      imageUrl: "https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=800",
+      latitude: 19.076,
+      longitude: 72.8777,
+      timezone: "Asia/Kolkata",
+      currency: "INR",
+      language: "Hindi",
+      popularity: 82,
+      costIndex: 45,
+    },
+    {
+      name: "Jaipur",
+      country: "India",
+      description: "The Pink City — Rajasthan's palaces, forts, and bazaars set against desert hills.",
+      imageUrl: "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=800",
+      latitude: 26.9124,
+      longitude: 75.7873,
+      timezone: "Asia/Kolkata",
+      currency: "INR",
+      language: "Hindi",
+      popularity: 84,
+      costIndex: 35,
+    },
+    {
+      name: "Goa",
+      country: "India",
+      description: "Laid-back beaches, Portuguese-era churches, and legendary nightlife on India's west coast.",
+      imageUrl: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800",
+      latitude: 15.2993,
+      longitude: 74.124,
+      timezone: "Asia/Kolkata",
+      currency: "INR",
+      language: "Konkani",
+      popularity: 83,
+      costIndex: 40,
+    },
+    {
+      name: "Cape Town",
+      country: "South Africa",
+      description: "Table Mountain, wine country, and windswept coastline at the tip of Africa.",
+      imageUrl: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800",
+      latitude: -33.9249,
+      longitude: 18.4241,
+      timezone: "Africa/Johannesburg",
+      currency: "ZAR",
+      language: "English",
+      popularity: 85,
+      costIndex: 65,
+    },
+    {
+      name: "Cairo",
+      country: "Egypt",
+      description: "Millennia of history along the Nile, from the Pyramids of Giza to the Egyptian Museum.",
+      imageUrl: "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800",
+      latitude: 30.0444,
+      longitude: 31.2357,
+      timezone: "Africa/Cairo",
+      currency: "EGP",
+      language: "Arabic",
+      popularity: 81,
+      costIndex: 35,
+    },
+    {
+      name: "Nairobi",
+      country: "Kenya",
+      description: "Safari gateway city with a national park at its edge and a buzzing tech and arts scene.",
+      imageUrl: "https://images.unsplash.com/photo-1611348586804-61bf6c080437?w=800",
+      latitude: -1.2921,
+      longitude: 36.8219,
+      timezone: "Africa/Nairobi",
+      currency: "KES",
+      language: "Swahili",
+      popularity: 74,
+      costIndex: 45,
+    },
+    {
+      name: "Rio de Janeiro",
+      country: "Brazil",
+      description: "Copacabana beach, Christ the Redeemer, and carnival energy against a mountain backdrop.",
+      imageUrl: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800",
+      latitude: -22.9068,
+      longitude: -43.1729,
+      timezone: "America/Sao_Paulo",
+      currency: "BRL",
+      language: "Portuguese",
+      popularity: 87,
+      costIndex: 60,
+    },
+    {
+      name: "Buenos Aires",
+      country: "Argentina",
+      description: "Tango, steak, and European-style boulevards on the Río de la Plata.",
+      imageUrl: "https://images.unsplash.com/photo-1589909202802-8f4aadce1849?w=800",
+      latitude: -34.6037,
+      longitude: -58.3816,
+      timezone: "America/Argentina/Buenos_Aires",
+      currency: "ARS",
+      language: "Spanish",
+      popularity: 80,
+      costIndex: 55,
+    },
+    {
+      name: "Mexico City",
+      country: "Mexico",
+      description: "Aztec ruins, world-class museums, and street food in one of the world's largest metropolises.",
+      imageUrl: "https://images.unsplash.com/photo-1518659526054-190340b32735?w=800",
+      latitude: 19.4326,
+      longitude: -99.1332,
+      timezone: "America/Mexico_City",
+      currency: "MXN",
+      language: "Spanish",
+      popularity: 83,
+      costIndex: 50,
+    },
+    {
+      name: "Toronto",
+      country: "Canada",
+      description: "Multicultural lakeside city anchored by the CN Tower and a thriving food scene.",
+      imageUrl: "https://images.unsplash.com/photo-1517090504586-fde19ea6066f?w=800",
+      latitude: 43.6532,
+      longitude: -79.3832,
+      timezone: "America/Toronto",
+      currency: "CAD",
+      language: "English",
+      popularity: 82,
+      costIndex: 120,
+    },
+    {
+      name: "San Francisco",
+      country: "USA",
+      state: "CA",
+      description: "Golden Gate Bridge views, steep hills, and the beating heart of tech culture.",
+      imageUrl: "https://images.unsplash.com/photo-1521464302861-ce943915d1c3?w=800",
+      latitude: 37.7749,
+      longitude: -122.4194,
+      timezone: "America/Los_Angeles",
+      currency: "USD",
+      language: "English",
+      popularity: 88,
+      costIndex: 170,
+    },
+    {
+      name: "Los Angeles",
+      country: "USA",
+      state: "CA",
+      description: "Hollywood glamour, beach boardwalks, and endless sunshine on the Pacific coast.",
+      imageUrl: "https://images.unsplash.com/photo-1444723121867-7a241cacace9?w=800",
+      latitude: 34.0522,
+      longitude: -118.2437,
+      timezone: "America/Los_Angeles",
+      currency: "USD",
+      language: "English",
+      popularity: 87,
+      costIndex: 150,
+    },
+    {
+      name: "Amsterdam",
+      country: "Netherlands",
+      description: "Canal-lined streets, world-class museums, and a bike-first way of life.",
+      imageUrl: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800",
+      latitude: 52.3676,
+      longitude: 4.9041,
+      timezone: "Europe/Amsterdam",
+      currency: "EUR",
+      language: "Dutch",
+      popularity: 90,
+      costIndex: 125,
+    },
+    {
+      name: "Berlin",
+      country: "Germany",
+      description: "Cold War history, world-famous nightlife, and a constantly reinventing arts scene.",
+      imageUrl: "https://images.unsplash.com/photo-1587330979470-3595ac045ab0?w=800",
+      latitude: 52.52,
+      longitude: 13.405,
+      timezone: "Europe/Berlin",
+      currency: "EUR",
+      language: "German",
+      popularity: 88,
+      costIndex: 100,
+    },
+    {
+      name: "Prague",
+      country: "Czech Republic",
+      description: "Fairy-tale old town, medieval castle, and some of Europe's best-value beer halls.",
+      imageUrl: "https://images.unsplash.com/photo-1541849546-216549ae216d?w=800",
+      latitude: 50.0755,
+      longitude: 14.4378,
+      timezone: "Europe/Prague",
+      currency: "CZK",
+      language: "Czech",
+      popularity: 86,
+      costIndex: 70,
+    },
+    {
+      name: "Vienna",
+      country: "Austria",
+      description: "Imperial palaces, classical music heritage, and coffeehouse culture.",
+      imageUrl: "https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=800",
+      latitude: 48.2082,
+      longitude: 16.3738,
+      timezone: "Europe/Vienna",
+      currency: "EUR",
+      language: "German",
+      popularity: 85,
+      costIndex: 105,
+    },
+    {
+      name: "Lisbon",
+      country: "Portugal",
+      description: "Pastel hillside streets, fado music, and pastel de nata straight from the oven.",
+      imageUrl: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=800",
+      latitude: 38.7223,
+      longitude: -9.1393,
+      timezone: "Europe/Lisbon",
+      currency: "EUR",
+      language: "Portuguese",
+      popularity: 87,
+      costIndex: 80,
+    },
+    {
+      name: "Istanbul",
+      country: "Turkey",
+      description: "Where East meets West — grand bazaars, ancient mosques, and Bosphorus ferry crossings.",
+      imageUrl: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=800",
+      latitude: 41.0082,
+      longitude: 28.9784,
+      timezone: "Europe/Istanbul",
+      currency: "TRY",
+      language: "Turkish",
+      popularity: 88,
+      costIndex: 50,
+    },
+    {
+      name: "Reykjavik",
+      country: "Iceland",
+      description: "Gateway to glaciers, geysers, and the Northern Lights.",
+      imageUrl: "https://images.unsplash.com/photo-1504829857797-ddff29c27927?w=800",
+      latitude: 64.1466,
+      longitude: -21.9426,
+      timezone: "Atlantic/Reykjavik",
+      currency: "ISK",
+      language: "Icelandic",
+      popularity: 79,
+      costIndex: 150,
+    },
+    {
+      name: "Queenstown",
+      country: "New Zealand",
+      description: "Adrenaline capital of the world, ringed by the Southern Alps and Lake Wakatipu.",
+      imageUrl: "https://images.unsplash.com/photo-1589871173360-3ac1e6ff2d67?w=800",
+      latitude: -45.0312,
+      longitude: 168.6626,
+      timezone: "Pacific/Auckland",
+      currency: "NZD",
+      language: "English",
+      popularity: 78,
+      costIndex: 130,
+    },
   ];
 
   const createdCities: { id: string; name: string }[] = [];
@@ -234,6 +548,32 @@ async function main() {
   const dubai = createdCities.find((c) => c.name === "Dubai")!;
   const bangkok = createdCities.find((c) => c.name === "Bangkok")!;
   const sydney = createdCities.find((c) => c.name === "Sydney")!;
+  const santorini = createdCities.find((c) => c.name === "Santorini")!;
+  const marrakech = createdCities.find((c) => c.name === "Marrakech")!;
+  const singapore = createdCities.find((c) => c.name === "Singapore")!;
+  const seoul = createdCities.find((c) => c.name === "Seoul")!;
+  const kyoto = createdCities.find((c) => c.name === "Kyoto")!;
+  const hongkong = createdCities.find((c) => c.name === "Hong Kong")!;
+  const mumbai = createdCities.find((c) => c.name === "Mumbai")!;
+  const jaipur = createdCities.find((c) => c.name === "Jaipur")!;
+  const goa = createdCities.find((c) => c.name === "Goa")!;
+  const capeTown = createdCities.find((c) => c.name === "Cape Town")!;
+  const cairo = createdCities.find((c) => c.name === "Cairo")!;
+  const nairobi = createdCities.find((c) => c.name === "Nairobi")!;
+  const rio = createdCities.find((c) => c.name === "Rio de Janeiro")!;
+  const buenosAires = createdCities.find((c) => c.name === "Buenos Aires")!;
+  const mexicoCity = createdCities.find((c) => c.name === "Mexico City")!;
+  const toronto = createdCities.find((c) => c.name === "Toronto")!;
+  const sanFrancisco = createdCities.find((c) => c.name === "San Francisco")!;
+  const losAngeles = createdCities.find((c) => c.name === "Los Angeles")!;
+  const amsterdam = createdCities.find((c) => c.name === "Amsterdam")!;
+  const berlin = createdCities.find((c) => c.name === "Berlin")!;
+  const prague = createdCities.find((c) => c.name === "Prague")!;
+  const vienna = createdCities.find((c) => c.name === "Vienna")!;
+  const lisbon = createdCities.find((c) => c.name === "Lisbon")!;
+  const istanbul = createdCities.find((c) => c.name === "Istanbul")!;
+  const reykjavik = createdCities.find((c) => c.name === "Reykjavik")!;
+  const queenstown = createdCities.find((c) => c.name === "Queenstown")!;
 
   const activitiesData: { cityId: string; name: string; description?: string; type: ActivityType; duration: number; cost: number; currency: string; rating: number; popularity: number; imageUrl?: string; location?: string }[] = [
     { cityId: paris.id, name: "Eiffel Tower Visit", description: "Skip-the-line access to the second floor and summit of the iconic Eiffel Tower", type: ActivityType.SIGHTSEEING, duration: 120, cost: 26, currency: "EUR", rating: 4.7, popularity: 100, imageUrl: "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=600", location: "Champ de Mars, 5 Av. Anatole France, 75007 Paris" },
@@ -273,6 +613,97 @@ async function main() {
     { cityId: sydney.id, name: "Sydney Opera House Tour", description: "Guided backstage tour of the world-famous iconic architectural masterpiece", type: ActivityType.CULTURE, duration: 120, cost: 45, currency: "AUD", rating: 4.7, popularity: 94, imageUrl: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=600", location: "Bennelong Point, Sydney" },
     { cityId: sydney.id, name: "Sydney Harbour Bridge Climb", description: "Climb to the top of the Harbour Bridge for breathtaking 360° views", type: ActivityType.ADVENTURE, duration: 210, cost: 198, currency: "AUD", rating: 4.8, popularity: 92, imageUrl: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=600", location: "5 Cumberland St, The Rocks, Sydney" },
     { cityId: sydney.id, name: "Blue Mountains Day Trip", description: "Visit the Three Sisters rock formation and Scenic World in the Blue Mountains", type: ActivityType.NATURE, duration: 600, cost: 119, currency: "AUD", rating: 4.6, popularity: 88, imageUrl: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=600", location: "Katoomba, Blue Mountains" },
+
+    { cityId: santorini.id, name: "Oia Sunset Watching", description: "Iconic sunset views over the caldera from the whitewashed village of Oia", type: ActivityType.SIGHTSEEING, duration: 90, cost: 0, currency: "EUR", rating: 4.9, popularity: 98, imageUrl: "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=600", location: "Oia, Santorini" },
+    { cityId: santorini.id, name: "Catamaran Caldera Cruise", description: "Sail the volcanic caldera with stops for swimming and a BBQ dinner onboard", type: ActivityType.ADVENTURE, duration: 300, cost: 95, currency: "EUR", rating: 4.7, popularity: 90, imageUrl: "https://images.unsplash.com/photo-1601581875309-fafbf2d3ed3a?w=600", location: "Vlychada Port, Santorini" },
+    { cityId: santorini.id, name: "Wine Tasting Tour", description: "Sample volcanic-soil Assyrtiko wines at family-run wineries", type: ActivityType.FOOD, duration: 180, cost: 65, currency: "EUR", rating: 4.6, popularity: 78, imageUrl: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=600", location: "Pyrgos, Santorini" },
+
+    { cityId: marrakech.id, name: "Jemaa el-Fnaa Night Market", description: "Explore the legendary square's food stalls, snake charmers, and storytellers", type: ActivityType.CULTURE, duration: 150, cost: 0, currency: "MAD", rating: 4.6, popularity: 95, imageUrl: "https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=600", location: "Jemaa el-Fnaa, Marrakech" },
+    { cityId: marrakech.id, name: "Atlas Mountains Day Trip", description: "Berber villages and valley views on a guided trip into the High Atlas", type: ActivityType.NATURE, duration: 480, cost: 45, currency: "MAD", rating: 4.5, popularity: 82, imageUrl: "https://images.unsplash.com/photo-1489493585363-d69421e0edd3?w=600", location: "High Atlas Mountains" },
+    { cityId: marrakech.id, name: "Traditional Hammam & Spa", description: "Moroccan bathhouse ritual with scrub, steam, and argan oil massage", type: ActivityType.OTHER, duration: 120, cost: 60, currency: "MAD", rating: 4.7, popularity: 70, imageUrl: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600", location: "Medina, Marrakech" },
+
+    { cityId: singapore.id, name: "Gardens by the Bay", description: "Super Tree Grove light show and Cloud Forest dome", type: ActivityType.SIGHTSEEING, duration: 150, cost: 28, currency: "SGD", rating: 4.7, popularity: 97, imageUrl: "https://images.unsplash.com/photo-1565967511849-76a60a516170?w=600", location: "18 Marina Gardens Dr, Singapore" },
+    { cityId: singapore.id, name: "Hawker Centre Food Crawl", description: "Guided tasting tour through Maxwell and Chinatown hawker stalls", type: ActivityType.FOOD, duration: 180, cost: 45, currency: "SGD", rating: 4.8, popularity: 90, imageUrl: "https://images.unsplash.com/photo-1541014741259-de529411b96a?w=600", location: "Chinatown Complex, Singapore" },
+    { cityId: singapore.id, name: "Sentosa Island Day Pass", description: "Beaches, Universal Studios, and cable car rides on Sentosa Island", type: ActivityType.ENTERTAINMENT, duration: 420, cost: 80, currency: "SGD", rating: 4.5, popularity: 85, imageUrl: "https://images.unsplash.com/photo-1565967511849-76a60a516170?w=600", location: "Sentosa Island, Singapore" },
+
+    { cityId: seoul.id, name: "Gyeongbokgung Palace & Hanbok", description: "Rent a hanbok and tour Seoul's grandest royal palace for free entry", type: ActivityType.CULTURE, duration: 150, cost: 15000, currency: "KRW", rating: 4.7, popularity: 94, imageUrl: "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=600", location: "161 Sajik-ro, Jongno-gu, Seoul" },
+    { cityId: seoul.id, name: "Myeongdong Street Food Tour", description: "Tteokbokki, hotteok, and Korean BBQ crawl through Myeongdong", type: ActivityType.FOOD, duration: 150, cost: 40000, currency: "KRW", rating: 4.6, popularity: 88, imageUrl: "https://images.unsplash.com/photo-1590301157890-4810ed352733?w=600", location: "Myeongdong, Seoul" },
+    { cityId: seoul.id, name: "N Seoul Tower & Bukchon Village", description: "Cable car up Namsan followed by a walk through Bukchon Hanok Village", type: ActivityType.SIGHTSEEING, duration: 180, cost: 21000, currency: "KRW", rating: 4.5, popularity: 86, imageUrl: "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=600", location: "Namsan, Seoul" },
+
+    { cityId: kyoto.id, name: "Fushimi Inari Torii Gates Hike", description: "Walk the thousands of vermillion torii gates up Mount Inari", type: ActivityType.NATURE, duration: 150, cost: 0, currency: "JPY", rating: 4.8, popularity: 96, imageUrl: "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=600", location: "Fushimi Inari Taisha, Kyoto" },
+    { cityId: kyoto.id, name: "Arashiyama Bamboo Grove", description: "Walk through the towering bamboo groves and visit the nearby monkey park", type: ActivityType.NATURE, duration: 120, cost: 500, currency: "JPY", rating: 4.6, popularity: 88, imageUrl: "https://images.unsplash.com/photo-1522547902298-51566e4fb383?w=600", location: "Arashiyama, Kyoto" },
+    { cityId: kyoto.id, name: "Gion Geisha District Walk", description: "Evening walking tour through Kyoto's historic geisha entertainment district", type: ActivityType.CULTURE, duration: 120, cost: 3000, currency: "JPY", rating: 4.5, popularity: 80, imageUrl: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600", location: "Gion, Kyoto" },
+
+    { cityId: hongkong.id, name: "Victoria Peak Tram & Skyline", description: "Peak Tram ride up to Victoria Peak for panoramic harbor views", type: ActivityType.SIGHTSEEING, duration: 120, cost: 99, currency: "HKD", rating: 4.6, popularity: 95, imageUrl: "https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=600", location: "Victoria Peak, Hong Kong" },
+    { cityId: hongkong.id, name: "Dim Sum Breakfast Tour", description: "Traditional trolley-cart dim sum tasting in a historic teahouse", type: ActivityType.FOOD, duration: 120, cost: 250, currency: "HKD", rating: 4.7, popularity: 85, imageUrl: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=600", location: "Central, Hong Kong" },
+    { cityId: hongkong.id, name: "Big Buddha & Ngong Ping 360", description: "Cable car to Lantau Island's giant bronze Buddha and Po Lin Monastery", type: ActivityType.CULTURE, duration: 240, cost: 260, currency: "HKD", rating: 4.5, popularity: 80, imageUrl: "https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=600", location: "Ngong Ping, Lantau Island" },
+
+    { cityId: mumbai.id, name: "Gateway of India & Elephanta Caves", description: "Ferry from the Gateway of India to the ancient rock-cut Elephanta Caves", type: ActivityType.CULTURE, duration: 300, cost: 1200, currency: "INR", rating: 4.5, popularity: 90, imageUrl: "https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=600", location: "Gateway of India, Mumbai" },
+    { cityId: mumbai.id, name: "Street Food Trail, Mohammed Ali Road", description: "Kebabs, biryani, and dessert crawl through Mumbai's iconic food street", type: ActivityType.FOOD, duration: 150, cost: 800, currency: "INR", rating: 4.7, popularity: 88, imageUrl: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600", location: "Mohammed Ali Road, Mumbai" },
+    { cityId: mumbai.id, name: "Marine Drive Sunset Walk", description: "Stroll the Queen's Necklace promenade as the sun sets over the Arabian Sea", type: ActivityType.SIGHTSEEING, duration: 90, cost: 0, currency: "INR", rating: 4.6, popularity: 82, imageUrl: "https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=600", location: "Marine Drive, Mumbai" },
+
+    { cityId: jaipur.id, name: "Amber Fort & Elephant Gate", description: "Explore the hilltop Amber Fort's mirrored halls and courtyards", type: ActivityType.CULTURE, duration: 180, cost: 500, currency: "INR", rating: 4.7, popularity: 96, imageUrl: "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=600", location: "Devisinghpura, Amer, Jaipur" },
+    { cityId: jaipur.id, name: "Hawa Mahal & City Palace", description: "Visit the Palace of Winds and the royal City Palace complex", type: ActivityType.SIGHTSEEING, duration: 150, cost: 400, currency: "INR", rating: 4.6, popularity: 90, imageUrl: "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=600", location: "Hawa Mahal Rd, Jaipur" },
+    { cityId: jaipur.id, name: "Chokhi Dhani Rural Village Evening", description: "Rajasthani folk dance, camel rides, and a traditional thali dinner", type: ActivityType.ENTERTAINMENT, duration: 240, cost: 900, currency: "INR", rating: 4.5, popularity: 78, imageUrl: "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=600", location: "Tonk Road, Jaipur" },
+
+    { cityId: goa.id, name: "Baga & Calangute Beach Day", description: "Water sports, beach shacks, and sunset at Goa's most popular beaches", type: ActivityType.ADVENTURE, duration: 300, cost: 1500, currency: "INR", rating: 4.4, popularity: 92, imageUrl: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600", location: "Baga Beach, Goa" },
+    { cityId: goa.id, name: "Old Goa Churches Heritage Walk", description: "UNESCO-listed Basilica of Bom Jesus and Se Cathedral walking tour", type: ActivityType.CULTURE, duration: 120, cost: 0, currency: "INR", rating: 4.5, popularity: 75, imageUrl: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600", location: "Old Goa" },
+    { cityId: goa.id, name: "Sunset Cruise on the Mandovi", description: "River cruise with live music and dancing as the sun sets", type: ActivityType.ENTERTAINMENT, duration: 90, cost: 600, currency: "INR", rating: 4.3, popularity: 80, imageUrl: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600", location: "Mandovi River, Panaji" },
+
+    { cityId: capeTown.id, name: "Table Mountain Cableway", description: "Rotating cable car to the top of Table Mountain for 360° views", type: ActivityType.NATURE, duration: 150, cost: 420, currency: "ZAR", rating: 4.8, popularity: 97, imageUrl: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=600", location: "Tafelberg Rd, Cape Town" },
+    { cityId: capeTown.id, name: "Cape Peninsula & Penguins Tour", description: "Cape Point, Boulders Beach penguin colony, and coastal drive", type: ActivityType.ADVENTURE, duration: 480, cost: 950, currency: "ZAR", rating: 4.7, popularity: 90, imageUrl: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=600", location: "Cape Peninsula" },
+    { cityId: capeTown.id, name: "Stellenbosch Wine Tasting", description: "Full-day wine estate tour through the Cape Winelands", type: ActivityType.FOOD, duration: 360, cost: 850, currency: "ZAR", rating: 4.6, popularity: 82, imageUrl: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=600", location: "Stellenbosch" },
+
+    { cityId: cairo.id, name: "Pyramids of Giza & Sphinx", description: "Guided tour of the Great Pyramid, Sphinx, and Valley Temple", type: ActivityType.SIGHTSEEING, duration: 240, cost: 15, currency: "EGP", rating: 4.8, popularity: 99, imageUrl: "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=600", location: "Al Haram, Giza" },
+    { cityId: cairo.id, name: "Egyptian Museum Tour", description: "Guided walk through Tutankhamun's treasures and royal mummies", type: ActivityType.CULTURE, duration: 150, cost: 12, currency: "EGP", rating: 4.6, popularity: 90, imageUrl: "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=600", location: "Tahrir Square, Cairo" },
+    { cityId: cairo.id, name: "Nile Dinner Cruise", description: "Evening felucca or dinner cruise along the Nile with folkloric show", type: ActivityType.ENTERTAINMENT, duration: 150, cost: 25, currency: "EGP", rating: 4.4, popularity: 78, imageUrl: "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=600", location: "Nile River, Cairo" },
+
+    { cityId: nairobi.id, name: "Nairobi National Park Safari", description: "Half-day game drive minutes from the city center — lions, giraffes, rhinos", type: ActivityType.NATURE, duration: 240, cost: 4300, currency: "KES", rating: 4.6, popularity: 93, imageUrl: "https://images.unsplash.com/photo-1611348586804-61bf6c080437?w=600", location: "Nairobi National Park" },
+    { cityId: nairobi.id, name: "Giraffe Centre & Elephant Orphanage", description: "Hand-feed Rothschild giraffes and visit orphaned baby elephants", type: ActivityType.NATURE, duration: 150, cost: 1500, currency: "KES", rating: 4.7, popularity: 85, imageUrl: "https://images.unsplash.com/photo-1611348586804-61bf6c080437?w=600", location: "Karen, Nairobi" },
+
+    { cityId: rio.id, name: "Christ the Redeemer & Corcovado", description: "Train up Corcovado Mountain to the iconic Art Deco statue", type: ActivityType.SIGHTSEEING, duration: 180, cost: 110, currency: "BRL", rating: 4.8, popularity: 98, imageUrl: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=600", location: "Parque Nacional da Tijuca, Rio" },
+    { cityId: rio.id, name: "Sugarloaf Mountain Cable Car", description: "Two-stage cable car ride for sunset views over Guanabara Bay", type: ActivityType.SIGHTSEEING, duration: 150, cost: 130, currency: "BRL", rating: 4.7, popularity: 92, imageUrl: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=600", location: "Urca, Rio de Janeiro" },
+    { cityId: rio.id, name: "Copacabana & Ipanema Beach Day", description: "Beach day with caipirinhas and a football match on the sand", type: ActivityType.ADVENTURE, duration: 240, cost: 0, currency: "BRL", rating: 4.5, popularity: 88, imageUrl: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=600", location: "Copacabana, Rio de Janeiro" },
+
+    { cityId: buenosAires.id, name: "Tango Show & Dinner in San Telmo", description: "Live tango performance with a traditional Argentine steak dinner", type: ActivityType.ENTERTAINMENT, duration: 180, cost: 55, currency: "ARS", rating: 4.7, popularity: 90, imageUrl: "https://images.unsplash.com/photo-1589909202802-8f4aadce1849?w=600", location: "San Telmo, Buenos Aires" },
+    { cityId: buenosAires.id, name: "Recoleta Cemetery & La Boca Walk", description: "Ornate mausoleums followed by the colorful Caminito street in La Boca", type: ActivityType.CULTURE, duration: 180, cost: 0, currency: "ARS", rating: 4.5, popularity: 82, imageUrl: "https://images.unsplash.com/photo-1589909202802-8f4aadce1849?w=600", location: "Recoleta & La Boca, Buenos Aires" },
+
+    { cityId: mexicoCity.id, name: "Teotihuacan Pyramids Day Trip", description: "Climb the Pyramid of the Sun and Pyramid of the Moon outside the city", type: ActivityType.SIGHTSEEING, duration: 360, cost: 450, currency: "MXN", rating: 4.7, popularity: 94, imageUrl: "https://images.unsplash.com/photo-1518659526054-190340b32735?w=600", location: "Teotihuacan" },
+    { cityId: mexicoCity.id, name: "Frida Kahlo Museum (Casa Azul)", description: "Tour the Blue House where Frida Kahlo lived and painted", type: ActivityType.CULTURE, duration: 120, cost: 250, currency: "MXN", rating: 4.6, popularity: 88, imageUrl: "https://images.unsplash.com/photo-1518659526054-190340b32735?w=600", location: "Coyoacán, Mexico City" },
+    { cityId: mexicoCity.id, name: "Xochimilco Trajinera Boat Party", description: "Colorful floating gardens boat ride with mariachi and street food", type: ActivityType.ENTERTAINMENT, duration: 180, cost: 350, currency: "MXN", rating: 4.5, popularity: 85, imageUrl: "https://images.unsplash.com/photo-1518659526054-190340b32735?w=600", location: "Xochimilco, Mexico City" },
+
+    { cityId: toronto.id, name: "CN Tower & EdgeWalk", description: "Observation deck views, glass floor, and optional edge walk around the tower", type: ActivityType.ADVENTURE, duration: 120, cost: 43, currency: "CAD", rating: 4.6, popularity: 92, imageUrl: "https://images.unsplash.com/photo-1517090504586-fde19ea6066f?w=600", location: "290 Bremner Blvd, Toronto" },
+    { cityId: toronto.id, name: "Niagara Falls Day Trip", description: "Boat tour to the base of the falls plus wine country stop", type: ActivityType.NATURE, duration: 600, cost: 140, currency: "CAD", rating: 4.7, popularity: 90, imageUrl: "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=600", location: "Niagara Falls, Ontario" },
+
+    { cityId: sanFrancisco.id, name: "Alcatraz Island Tour", description: "Ferry and audio tour of the infamous former federal prison", type: ActivityType.CULTURE, duration: 180, cost: 45, currency: "USD", rating: 4.8, popularity: 96, imageUrl: "https://images.unsplash.com/photo-1521464302861-ce943915d1c3?w=600", location: "Pier 33, San Francisco" },
+    { cityId: sanFrancisco.id, name: "Golden Gate Bridge Bike Ride", description: "Cycle across the bridge to Sausalito with a ferry back", type: ActivityType.ADVENTURE, duration: 240, cost: 40, currency: "USD", rating: 4.7, popularity: 88, imageUrl: "https://images.unsplash.com/photo-1521464302861-ce943915d1c3?w=600", location: "Golden Gate Bridge, San Francisco" },
+
+    { cityId: losAngeles.id, name: "Universal Studios Hollywood", description: "Movie-themed rides and the Studio Tour behind the scenes", type: ActivityType.ENTERTAINMENT, duration: 480, cost: 109, currency: "USD", rating: 4.6, popularity: 93, imageUrl: "https://images.unsplash.com/photo-1444723121867-7a241cacace9?w=600", location: "Universal City, LA" },
+    { cityId: losAngeles.id, name: "Griffith Observatory & Hollywood Sign", description: "Sunset views over the city with the Hollywood Sign in frame", type: ActivityType.SIGHTSEEING, duration: 120, cost: 0, currency: "USD", rating: 4.7, popularity: 90, imageUrl: "https://images.unsplash.com/photo-1444723121867-7a241cacace9?w=600", location: "Griffith Park, LA" },
+
+    { cityId: amsterdam.id, name: "Canal Cruise", description: "Evening canal cruise past the Golden Age merchant houses", type: ActivityType.SIGHTSEEING, duration: 90, cost: 20, currency: "EUR", rating: 4.6, popularity: 95, imageUrl: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=600", location: "Amsterdam canal belt" },
+    { cityId: amsterdam.id, name: "Van Gogh Museum", description: "The world's largest collection of Van Gogh paintings and letters", type: ActivityType.CULTURE, duration: 120, cost: 22, currency: "EUR", rating: 4.7, popularity: 90, imageUrl: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=600", location: "Museumplein, Amsterdam" },
+
+    { cityId: berlin.id, name: "Berlin Wall & East Side Gallery", description: "Guided walk along the longest surviving stretch of the Berlin Wall murals", type: ActivityType.CULTURE, duration: 120, cost: 0, currency: "EUR", rating: 4.6, popularity: 88, imageUrl: "https://images.unsplash.com/photo-1587330979470-3595ac045ab0?w=600", location: "Mühlenstraße, Berlin" },
+    { cityId: berlin.id, name: "Brandenburg Gate & Reichstag Dome", description: "Free entry to the Reichstag's glass dome (advance booking required)", type: ActivityType.SIGHTSEEING, duration: 120, cost: 0, currency: "EUR", rating: 4.7, popularity: 90, imageUrl: "https://images.unsplash.com/photo-1587330979470-3595ac045ab0?w=600", location: "Platz der Republik, Berlin" },
+
+    { cityId: prague.id, name: "Prague Castle & St. Vitus Cathedral", description: "Explore the largest ancient castle complex in the world", type: ActivityType.CULTURE, duration: 180, cost: 250, currency: "CZK", rating: 4.7, popularity: 94, imageUrl: "https://images.unsplash.com/photo-1541849546-216549ae216d?w=600", location: "Hradčany, Prague" },
+    { cityId: prague.id, name: "Charles Bridge & Old Town Walk", description: "Sunrise walk across Charles Bridge into the Old Town Square", type: ActivityType.SIGHTSEEING, duration: 120, cost: 0, currency: "CZK", rating: 4.8, popularity: 92, imageUrl: "https://images.unsplash.com/photo-1541849546-216549ae216d?w=600", location: "Charles Bridge, Prague" },
+
+    { cityId: vienna.id, name: "Schönbrunn Palace Tour", description: "Habsburg imperial summer palace with gardens and gloriette", type: ActivityType.CULTURE, duration: 180, cost: 26, currency: "EUR", rating: 4.7, popularity: 93, imageUrl: "https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=600", location: "Schönbrunner Schloßstraße, Vienna" },
+    { cityId: vienna.id, name: "Vienna State Opera Performance", description: "Evening classical performance at one of the world's leading opera houses", type: ActivityType.ENTERTAINMENT, duration: 180, cost: 45, currency: "EUR", rating: 4.8, popularity: 82, imageUrl: "https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=600", location: "Opernring 2, Vienna" },
+
+    { cityId: lisbon.id, name: "Belém Tower & Jerónimos Monastery", description: "UNESCO landmarks from Portugal's Age of Discovery, plus a pastel de nata stop", type: ActivityType.CULTURE, duration: 180, cost: 12, currency: "EUR", rating: 4.7, popularity: 92, imageUrl: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=600", location: "Belém, Lisbon" },
+    { cityId: lisbon.id, name: "Tram 28 & Alfama District", description: "Ride the historic yellow tram through Lisbon's oldest hillside neighborhood", type: ActivityType.SIGHTSEEING, duration: 120, cost: 3, currency: "EUR", rating: 4.6, popularity: 88, imageUrl: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=600", location: "Alfama, Lisbon" },
+
+    { cityId: istanbul.id, name: "Hagia Sophia & Blue Mosque", description: "Guided tour of two of the world's most significant religious monuments", type: ActivityType.CULTURE, duration: 150, cost: 25, currency: "TRY", rating: 4.8, popularity: 97, imageUrl: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=600", location: "Sultanahmet, Istanbul" },
+    { cityId: istanbul.id, name: "Bosphorus Sunset Cruise", description: "Cruise between Europe and Asia with views of Ottoman palaces", type: ActivityType.SIGHTSEEING, duration: 120, cost: 20, currency: "TRY", rating: 4.6, popularity: 88, imageUrl: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=600", location: "Bosphorus Strait, Istanbul" },
+
+    { cityId: reykjavik.id, name: "Golden Circle Tour", description: "Þingvellir National Park, Geysir hot springs, and Gullfoss waterfall in one day", type: ActivityType.NATURE, duration: 480, cost: 90, currency: "ISK", rating: 4.8, popularity: 96, imageUrl: "https://images.unsplash.com/photo-1504829857797-ddff29c27927?w=600", location: "Golden Circle, Iceland" },
+    { cityId: reykjavik.id, name: "Blue Lagoon Geothermal Spa", description: "Soak in the milky-blue geothermal waters with a silica mud mask", type: ActivityType.OTHER, duration: 180, cost: 70, currency: "ISK", rating: 4.7, popularity: 92, imageUrl: "https://images.unsplash.com/photo-1504829857797-ddff29c27927?w=600", location: "Grindavík, Iceland" },
+
+    { cityId: queenstown.id, name: "Shotover Jet Boat Ride", description: "High-speed jet boat through the narrow canyons of the Shotover River", type: ActivityType.ADVENTURE, duration: 60, cost: 149, currency: "NZD", rating: 4.7, popularity: 90, imageUrl: "https://images.unsplash.com/photo-1589871173360-3ac1e6ff2d67?w=600", location: "Shotover River, Queenstown" },
+    { cityId: queenstown.id, name: "Milford Sound Day Cruise", description: "Full-day trip to the fiord with waterfalls, seals, and dramatic peaks", type: ActivityType.NATURE, duration: 720, cost: 249, currency: "NZD", rating: 4.9, popularity: 94, imageUrl: "https://images.unsplash.com/photo-1589871173360-3ac1e6ff2d67?w=600", location: "Milford Sound, Fiordland" },
   ];
 
   let activitiesCount = 0;

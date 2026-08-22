@@ -43,6 +43,15 @@ enum ShareRole {
   OWNER
 }
 
+enum PackingCategory {
+  CLOTHING
+  DOCUMENTS
+  ELECTRONICS
+  TOILETRIES
+  HEALTH
+  MISCELLANEOUS
+}
+
 model User {
   id            String    @id @default(uuid())
   name          String?
@@ -126,9 +135,25 @@ model Trip {
   expenses    Expense[]
   shares      TripShare[]
   communityPosts CommunityPost[]
+  packingItems   PackingItem[]
 
   @@index([userId])
   @@index([shareToken])
+}
+
+model PackingItem {
+  id        String          @id @default(uuid())
+  tripId    String
+  name      String
+  category  PackingCategory @default(MISCELLANEOUS)
+  quantity  Int             @default(1)
+  packed    Boolean         @default(false)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  trip      Trip            @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([tripId])
 }
 
 model City {

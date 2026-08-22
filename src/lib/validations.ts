@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { TripStatus, ActivityType, ExpenseCategory, ShareRole } from "@prisma/client";
+import { TripStatus, ActivityType, ExpenseCategory, ShareRole, PackingCategory } from "@prisma/client";
 
 export const registerSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(50),
@@ -119,6 +119,19 @@ export const createExpenseSchema = z.object({
 });
 
 export const updateExpenseSchema = createExpenseSchema.partial();
+
+export const createPackingItemSchema = z.object({
+  name: z.string().min(1, "Item name is required").max(150),
+  category: z.nativeEnum(PackingCategory).default(PackingCategory.MISCELLANEOUS),
+  quantity: z.coerce.number().int().min(1).max(999).default(1),
+});
+
+export const updatePackingItemSchema = z.object({
+  name: z.string().min(1).max(150).optional(),
+  category: z.nativeEnum(PackingCategory).optional(),
+  quantity: z.coerce.number().int().min(1).max(999).optional(),
+  packed: z.boolean().optional(),
+});
 
 export const searchCitiesSchema = z.object({
   query: z.string().max(100).optional(),

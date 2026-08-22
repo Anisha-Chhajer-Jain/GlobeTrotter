@@ -114,6 +114,14 @@ export const budgetApi = {
   get: (tripId: string) => get<{ budget: any }>(`/trips/${tripId}/budget`),
 };
 
+export const packingApi = {
+  list: (tripId: string) => get<{ items: any[] }>(`/trips/${tripId}/packing`),
+  create: (tripId: string, data: any) => post<{ item: any }>(`/trips/${tripId}/packing`, data),
+  update: (tripId: string, itemId: string, data: any) =>
+    patch<{ item: any }>(`/trips/${tripId}/packing/${itemId}`, data),
+  remove: (tripId: string, itemId: string) => del<{ message: string }>(`/trips/${tripId}/packing/${itemId}`),
+};
+
 export const sharesApi = {
   list: (tripId: string) =>
     get<{ isPublic: boolean; shareToken: string | null; publicUrl: string | null; shares: any[] }>(

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { ArrowLeft, Pencil, Wallet, CalendarDays, Share2, MapPin, Clock, ArrowDown } from "lucide-react";
+import { ArrowLeft, Pencil, Wallet, CalendarDays, Share2, MapPin, Clock, ArrowDown, Luggage } from "lucide-react";
 import { tripsApi } from "@/lib/api-client";
 import { LoadingSpinner, EmptyState, Badge } from "@/components/ui/Misc";
 import Button from "@/components/ui/Button";
@@ -65,6 +65,11 @@ export default function ItineraryViewPage() {
             <Link href={`/trips/${tripId}/budget`}>
               <Button variant="outline" size="sm">
                 <Wallet className="w-3.5 h-3.5" /> Budget
+              </Button>
+            </Link>
+            <Link href={`/trips/${tripId}/packing`}>
+              <Button variant="outline" size="sm">
+                <Luggage className="w-3.5 h-3.5" /> Packing
               </Button>
             </Link>
             <Link href={`/trips/${tripId}/share`}>
