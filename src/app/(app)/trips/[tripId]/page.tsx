@@ -4,9 +4,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
-<<<<<<< Updated upstream
-import { ArrowLeft, Pencil, Wallet, CalendarDays, Share2, MapPin, Clock, ArrowDown, Luggage } from "lucide-react";
-=======
 import {
   ArrowLeft,
   Pencil,
@@ -26,8 +23,8 @@ import {
   Plane,
   ChevronRight,
   SunMedium,
+  Luggage,
 } from "lucide-react";
->>>>>>> Stashed changes
 import { tripsApi } from "@/lib/api-client";
 import { LoadingSpinner, EmptyState, Badge } from "@/components/ui/Misc";
 import Button from "@/components/ui/Button";
@@ -87,48 +84,6 @@ export default function ItineraryViewPage() {
   const cover = trip.coverImage || trip.stops?.[0]?.city?.imageUrl;
 
   return (
-<<<<<<< Updated upstream
-    <div className="max-w-3xl mx-auto space-y-6">
-      <div>
-        <Link href="/trips" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-3">
-          <ArrowLeft className="w-4 h-4" /> Back to trips
-        </Link>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">{trip.title}</h1>
-            <p className="text-sm text-gray-500 mt-0.5">{formatDateRange(trip.startDate, trip.endDate)}</p>
-            {trip.description && <p className="text-sm text-gray-600 mt-2 max-w-xl">{trip.description}</p>}
-          </div>
-          <div className="flex gap-2 flex-wrap">
-            <Link href={`/trips/${tripId}/build`}>
-              <Button variant="outline" size="sm">
-                <Pencil className="w-3.5 h-3.5" /> Edit
-              </Button>
-            </Link>
-            <Link href={`/trips/${tripId}/calendar`}>
-              <Button variant="outline" size="sm">
-                <CalendarDays className="w-3.5 h-3.5" /> Calendar
-              </Button>
-            </Link>
-            <Link href={`/trips/${tripId}/budget`}>
-              <Button variant="outline" size="sm">
-                <Wallet className="w-3.5 h-3.5" /> Budget
-              </Button>
-            </Link>
-            <Link href={`/trips/${tripId}/packing`}>
-              <Button variant="outline" size="sm">
-                <Luggage className="w-3.5 h-3.5" /> Packing
-              </Button>
-            </Link>
-            <Link href={`/trips/${tripId}/share`}>
-              <Button variant="outline" size="sm">
-                <Share2 className="w-3.5 h-3.5" /> Share
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-=======
     <div className="max-w-6xl mx-auto space-y-8 pb-20">
       {/* Top Back Link */}
       <Link
@@ -138,7 +93,6 @@ export default function ItineraryViewPage() {
         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
         <span>Back to My Trips</span>
       </Link>
->>>>>>> Stashed changes
 
       {/* 🌟 Signature Itinerary Hero Banner */}
       <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-primary-600 via-indigo-600 to-primary-700 text-white shadow-lift border border-white/10">
@@ -212,6 +166,12 @@ export default function ItineraryViewPage() {
               <Link href={`/trips/${tripId}/budget`}>
                 <Button variant="outline" size="sm" className="bg-white/15 hover:bg-white/25 text-white border-white/20 rounded-xl font-semibold backdrop-blur-md">
                   <Wallet className="w-3.5 h-3.5 text-indigo-200" /> Budget
+                </Button>
+              </Link>
+
+              <Link href={`/trips/${tripId}/packing`}>
+                <Button variant="outline" size="sm" className="bg-white/15 hover:bg-white/25 text-white border-white/20 rounded-xl font-semibold backdrop-blur-md">
+                  <Luggage className="w-3.5 h-3.5 text-amber-300" /> Packing
                 </Button>
               </Link>
 
