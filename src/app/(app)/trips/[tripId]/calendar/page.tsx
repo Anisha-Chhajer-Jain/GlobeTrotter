@@ -9,6 +9,7 @@ import { tripsApi, tripActivitiesApi } from "@/lib/api-client";
 import { LoadingSpinner, EmptyState, Badge } from "@/components/ui/Misc";
 import ActivityEditModal from "@/components/itinerary/ActivityEditModal";
 import { formatMoney, formatDayLabel } from "@/lib/format";
+import { convertCurrency } from "@/lib/currency";
 
 export default function TripCalendarPage() {
   const { tripId } = useParams<{ tripId: string }>();
@@ -87,7 +88,10 @@ export default function TripCalendarPage() {
         <div className="space-y-3">
           {sortedDays.map(([day, items]) => {
             const expanded = expandedDays.has(day) || expandedDays.size === 0;
-            const dayTotal = items.reduce((sum, ta) => sum + Number(ta.actualCost ?? ta.activity.cost ?? 0), 0);
+            const dayTotal = items.reduce(
+              (sum, ta) => sum + convertCurrency(Number(ta.actualCost ?? ta.activity.cost ?? 0), ta.activity.currency, trip.currency),
+              0
+            );
             return (
               <div key={day} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                 <button

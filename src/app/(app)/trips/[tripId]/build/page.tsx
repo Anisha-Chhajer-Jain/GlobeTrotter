@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { DndContext, closestCenter, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
+import { DndContext, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
 import { Plus, ArrowLeft, Eye, Wallet, CalendarDays, Share2 } from "lucide-react";
 import { tripsApi, stopsApi, tripActivitiesApi } from "@/lib/api-client";
 import { LoadingSpinner, EmptyState } from "@/components/ui/Misc";
@@ -16,6 +16,7 @@ import CitySearchPanel from "@/components/CitySearchPanel";
 import ActivitySearchPanel from "@/components/ActivitySearchPanel";
 import SortableStopCard from "@/components/itinerary/SortableStopCard";
 import ActivityEditModal from "@/components/itinerary/ActivityEditModal";
+import StopBudgetModal from "@/components/itinerary/StopBudgetModal";
 import { formatDateRange } from "@/lib/format";
 
 export default function TripBuilderPage() {
@@ -35,8 +36,12 @@ export default function TripBuilderPage() {
 
   const [deleteStopTarget, setDeleteStopTarget] = useState<any>(null);
   const [deleteActivityTarget, setDeleteActivityTarget] = useState<{ stop: any; ta: any } | null>(null);
+  const [budgetStop, setBudgetStop] = useState<any>(null);
 
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
 
   async function load() {
     setLoading(true);
@@ -72,13 +77,18 @@ export default function TripBuilderPage() {
   function handleStopDragEnd(e: DragEndEvent) {
     const { active, over } = e;
     if (!over || active.id === over.id) return;
-    setTrip((t: any) => {
-      const ids = t.stops.map((s: any) => s.id);
-      const oldIndex = ids.indexOf(active.id as string);
-      const newIndex = ids.indexOf(over.id as string);
-      const newStops = arrayMove(t.stops, oldIndex, newIndex);
-      stopsApi.reorder(tripId, newStops.map((s: any) => s.id)).catch(() => toast.error("Failed to save order"));
-      return { ...t, stops: newStops };
+
+    const previousStops = trip.stops;
+    const ids = previousStops.map((s: any) => s.id);
+    const oldIndex = ids.indexOf(active.id as string);
+    const newIndex = ids.indexOf(over.id as string);
+    const newStops = arrayMove(previousStops, oldIndex, newIndex);
+
+    setTrip((t: any) => ({ ...t, stops: newStops }));
+
+    stopsApi.reorder(tripId, newStops.map((s: any) => s.id)).catch(() => {
+      toast.error("Failed to save order — reverting");
+      setTrip((t: any) => ({ ...t, stops: previousStops }));
     });
   }
 
@@ -130,6 +140,8 @@ export default function TripBuilderPage() {
   }
 
   function handleReorderActivities(stop: any, activityIds: string[]) {
+    const previousActivities = stop.activities;
+
     setTrip((t: any) => ({
       ...t,
       stops: t.stops.map((s: any) => {
@@ -138,7 +150,14 @@ export default function TripBuilderPage() {
         return { ...s, activities: activityIds.map((id) => byId.get(id)) };
       }),
     }));
-    tripActivitiesApi.reorder(tripId, stop.id, activityIds).catch(() => toast.error("Failed to save order"));
+
+    tripActivitiesApi.reorder(tripId, stop.id, activityIds).catch(() => {
+      toast.error("Failed to save order — reverting");
+      setTrip((t: any) => ({
+        ...t,
+        stops: t.stops.map((s: any) => (s.id === stop.id ? { ...s, activities: previousActivities } : s)),
+      }));
+    });
   }
 
   async function handleSaveActivity(data: any) {
@@ -243,6 +262,7 @@ export default function TripBuilderPage() {
                   onEditActivity={(stop, ta) => setEditingActivity({ stop, ta })}
                   onDeleteActivity={(stop, ta) => setDeleteActivityTarget({ stop, ta })}
                   onReorderActivities={handleReorderActivities}
+                  onOpenBudget={setBudgetStop}
                 />
               ))}
             </div>
@@ -282,6 +302,8 @@ export default function TripBuilderPage() {
         onSave={handleSaveActivity}
         saving={savingActivity}
       />
+
+      <StopBudgetModal open={!!budgetStop} tripId={tripId} stop={budgetStop} onClose={() => setBudgetStop(null)} />
 
       <ConfirmDialog
         open={!!deleteStopTarget}

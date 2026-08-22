@@ -124,10 +124,13 @@ export async function getCurrentUser() {
     select: {
       id: true,
       name: true,
+      firstName: true,
+      lastName: true,
       email: true,
       image: true,
       bio: true,
       phone: true,
+      city: true,
       country: true,
       currency: true,
       createdAt: true,

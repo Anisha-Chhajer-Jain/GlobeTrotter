@@ -79,9 +79,9 @@ function LoginForm() {
             />
           </div>
           <div className="flex justify-end">
-            <span className="text-xs text-gray-400 cursor-not-allowed" title="Not available yet">
+            <Link href="/forgot-password" className="text-xs text-blue-600 hover:underline">
               Forgot password?
-            </span>
+            </Link>
           </div>
           <Button type="submit" className="w-full" loading={loading}>
             Log In

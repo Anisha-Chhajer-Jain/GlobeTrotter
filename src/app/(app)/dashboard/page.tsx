@@ -30,19 +30,22 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Welcome back, {session?.user?.name?.split(" ")[0] || "traveler"} 👋
-          </h1>
-          <p className="text-gray-500 text-sm mt-1">Here&apos;s what&apos;s happening with your travels.</p>
+      <div className="relative h-40 sm:h-48 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-700 flex items-end">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
+        <div className="relative z-10 p-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4 w-full">
+          <div>
+            <h1 className="text-2xl font-bold text-white">
+              Welcome back, {session?.user?.name?.split(" ")[0] || "traveler"} 👋
+            </h1>
+            <p className="text-blue-100 text-sm mt-1">Here&apos;s what&apos;s happening with your travels.</p>
+          </div>
+          <Link
+            href="/trips/new"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white text-blue-700 font-semibold text-sm hover:bg-blue-50 shadow-sm w-fit"
+          >
+            <Plus className="w-4 h-4" /> Plan New Trip
+          </Link>
         </div>
-        <Link
-          href="/trips/new"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 shadow-sm shadow-blue-200"
-        >
-          <Plus className="w-4 h-4" /> Plan New Trip
-        </Link>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -78,6 +81,17 @@ export default function DashboardPage() {
           </div>
         )}
       </section>
+
+      {data.pastTrips?.length > 0 && (
+        <section>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Previous Trips</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {data.pastTrips.map((trip: any) => (
+              <TripCard key={trip.id} trip={trip} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {data.sharedWithMe?.length > 0 && (
         <section>

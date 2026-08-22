@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ZodError, ZodSchema } from "zod";
+import { Prisma } from "@prisma/client";
 
 export class AppError extends Error {
   public statusCode: number;
@@ -55,6 +56,23 @@ export function handleApiError(error: unknown): NextResponse {
     return errorResponse(summary || "Validation failed", 400, fieldErrors);
   }
 
+  // Prisma's own error codes are checked before falling back to fuzzy
+  // message matching — that fallback previously misclassified some errors
+  // because it depended on Prisma's error text staying stable.
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === "P2002") {
+      const target = (error.meta?.target as string[] | undefined)?.join(", ");
+      return errorResponse(target ? `A record with this ${target} already exists` : "Record already exists", 409);
+    }
+    if (error.code === "P2025") {
+      return errorResponse("Record not found", 404);
+    }
+    if (error.code === "P2003") {
+      return errorResponse("Related record not found", 400);
+    }
+    return errorResponse("Database error", 500);
+  }
+
   if (error instanceof Error) {
     const msg = error.message.toLowerCase();
     if (msg.includes("not found") || msg.includes("does not exist")) {
@@ -65,9 +83,6 @@ export function handleApiError(error: unknown): NextResponse {
     }
     if (msg.includes("forbidden") || msg.includes("not allowed") || msg.includes("permission")) {
       return errorResponse(error.message, 403);
-    }
-    if (msg.includes("duplicate") || msg.includes("unique") || msg.includes("already exists")) {
-      return errorResponse(error.message, 409);
     }
     return errorResponse("Internal server error", 500);
   }

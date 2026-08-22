@@ -14,8 +14,11 @@ async function main() {
     create: {
       email: "john@globetrotter.dev",
       name: "John Traveler",
+      firstName: "John",
+      lastName: "Traveler",
       password: hashedPassword,
       bio: "Passionate traveler exploring the world one city at a time!",
+      city: "New York",
       country: "USA",
       currency: "USD",
       image: "https://i.pravatar.cc/150?img=1",
@@ -28,8 +31,11 @@ async function main() {
     create: {
       email: "jane@globetrotter.dev",
       name: "Jane Explorer",
+      firstName: "Jane",
+      lastName: "Explorer",
       password: hashedPassword,
       bio: "Adventure seeker & food enthusiast!",
+      city: "London",
       country: "UK",
       currency: "GBP",
       image: "https://i.pravatar.cc/150?img=5",
@@ -338,6 +344,35 @@ async function main() {
   });
 
   console.log("✅ Sample trip created with 3 stops");
+
+  const communityPostsData = [
+    {
+      userId: user1.id,
+      tripId: trip1.id,
+      cityId: paris.id,
+      title: "Paris in June was magical",
+      content: "Skip-the-line Eiffel Tower tickets saved us hours — go up at sunset for the best light over the city.",
+    },
+    {
+      userId: user2.id,
+      cityId: rome.id,
+      title: "Rome food tip: Trastevere at night",
+      content: "The Trastevere food tour was the highlight of our trip. Book the evening slot to catch the neighborhood lit up.",
+    },
+    {
+      userId: user1.id,
+      cityId: barcelona.id,
+      title: "Sagrada Família — book weeks ahead",
+      content: "Tower access tickets sell out fast in summer. We booked 3 weeks early and still only got a mid-afternoon slot.",
+    },
+  ];
+
+  for (const post of communityPostsData) {
+    const existing = await prisma.communityPost.findFirst({ where: { userId: post.userId, title: post.title } });
+    if (existing) continue;
+    await prisma.communityPost.create({ data: post });
+  }
+  console.log("✅ Community posts created");
 
   console.log("🎉 Database seeding complete!");
 }

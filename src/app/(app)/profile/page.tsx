@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import toast from "react-hot-toast";
 import { User as UserIcon, Lock, Trash2 } from "lucide-react";
-import { profileApi, ApiError } from "@/lib/api-client";
+import { profileApi, tripsApi, ApiError } from "@/lib/api-client";
 import { Input, Textarea, Select } from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
-import { LoadingSpinner } from "@/components/ui/Misc";
+import { LoadingSpinner, EmptyState } from "@/components/ui/Misc";
+import { formatDateRange } from "@/lib/format";
 
 const CURRENCIES = ["USD", "EUR", "GBP", "JPY", "AUD", "INR", "CAD"];
 
@@ -25,12 +27,30 @@ export default function ProfilePage() {
 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleteError, setDeleteError] = useState("");
+
+  const [preplannedTrips, setPreplannedTrips] = useState<any[]>([]);
+  const [previousTrips, setPreviousTrips] = useState<any[]>([]);
 
   useEffect(() => {
     profileApi
       .get()
       .then(({ user }) => setUser(user))
       .finally(() => setLoading(false));
+
+    tripsApi.list({ limit: 100 }).then(({ trips }) => {
+      const now = new Date();
+      const preplanned: any[] = [];
+      const previous: any[] = [];
+      for (const trip of trips) {
+        const end = trip.endDate ? new Date(trip.endDate) : null;
+        if (trip.status === "COMPLETED" || (end && end < now)) previous.push(trip);
+        else preplanned.push(trip);
+      }
+      setPreplannedTrips(preplanned.slice(0, 6));
+      setPreviousTrips(previous.slice(0, 6));
+    });
   }, []);
 
   function update(field: string, value: string) {
@@ -44,8 +64,11 @@ export default function ProfilePage() {
     try {
       const { user: updated } = await profileApi.update({
         name: user.name,
+        firstName: user.firstName || null,
+        lastName: user.lastName || null,
         bio: user.bio || null,
         phone: user.phone || null,
+        city: user.city || null,
         country: user.country || null,
         currency: user.currency,
         image: user.image || null,
@@ -82,15 +105,22 @@ export default function ProfilePage() {
   }
 
   async function handleDeleteAccount() {
+    setDeleteError("");
     setDeleting(true);
     try {
-      await profileApi.deleteAccount();
+      await profileApi.deleteAccount(deletePassword);
       toast.success("Account deleted");
       await signOut({ callbackUrl: "/" });
     } catch (err) {
-      toast.error(err instanceof ApiError ? err.message : "Failed to delete account");
+      setDeleteError(err instanceof ApiError ? err.message : "Failed to delete account");
       setDeleting(false);
     }
+  }
+
+  function closeDeleteDialog() {
+    setDeleteOpen(false);
+    setDeletePassword("");
+    setDeleteError("");
   }
 
   if (loading) return <LoadingSpinner label="Loading profile..." />;
@@ -122,13 +152,28 @@ export default function ProfilePage() {
             />
           </div>
         </div>
-        <Input label="Name" required value={user.name || ""} onChange={(e) => update("name", e.target.value)} error={profileErrors.name} />
+        <div className="grid grid-cols-2 gap-4">
+          <Input
+            label="First name"
+            value={user.firstName || ""}
+            onChange={(e) => update("firstName", e.target.value)}
+            error={profileErrors.firstName}
+          />
+          <Input
+            label="Last name"
+            value={user.lastName || ""}
+            onChange={(e) => update("lastName", e.target.value)}
+            error={profileErrors.lastName}
+          />
+        </div>
+        <Input label="Display name" required value={user.name || ""} onChange={(e) => update("name", e.target.value)} error={profileErrors.name} />
         <Input label="Email" value={user.email} disabled />
         <Textarea label="Bio" rows={3} value={user.bio || ""} onChange={(e) => update("bio", e.target.value)} error={profileErrors.bio} />
         <div className="grid grid-cols-2 gap-4">
           <Input label="Phone" value={user.phone || ""} onChange={(e) => update("phone", e.target.value)} error={profileErrors.phone} />
-          <Input label="Country" value={user.country || ""} onChange={(e) => update("country", e.target.value)} error={profileErrors.country} />
+          <Input label="City" value={user.city || ""} onChange={(e) => update("city", e.target.value)} error={profileErrors.city} />
         </div>
+        <Input label="Country" value={user.country || ""} onChange={(e) => update("country", e.target.value)} error={profileErrors.country} />
         <Select label="Preferred currency" value={user.currency} onChange={(e) => update("currency", e.target.value)}>
           {CURRENCIES.map((c) => (
             <option key={c} value={c}>
@@ -142,6 +187,44 @@ export default function ProfilePage() {
           </Button>
         </div>
       </form>
+
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <h2 className="font-bold text-gray-900 mb-4">Preplanned Trips</h2>
+        {preplannedTrips.length === 0 ? (
+          <EmptyState title="No upcoming trips" />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {preplannedTrips.map((trip) => (
+              <div key={trip.id} className="border border-gray-100 rounded-xl p-3">
+                <p className="text-sm font-semibold text-gray-900 truncate">{trip.title}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{formatDateRange(trip.startDate, trip.endDate)}</p>
+                <Link href={`/trips/${trip.id}`} className="text-xs text-blue-600 font-semibold hover:underline mt-2 inline-block">
+                  View
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <h2 className="font-bold text-gray-900 mb-4">Previous Trips</h2>
+        {previousTrips.length === 0 ? (
+          <EmptyState title="No completed trips yet" />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {previousTrips.map((trip) => (
+              <div key={trip.id} className="border border-gray-100 rounded-xl p-3">
+                <p className="text-sm font-semibold text-gray-900 truncate">{trip.title}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{formatDateRange(trip.startDate, trip.endDate)}</p>
+                <Link href={`/trips/${trip.id}`} className="text-xs text-blue-600 font-semibold hover:underline mt-2 inline-block">
+                  View
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       <form onSubmit={handleChangePassword} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
         <h2 className="font-bold text-gray-900 flex items-center gap-2">
@@ -191,12 +274,21 @@ export default function ProfilePage() {
       <ConfirmDialog
         open={deleteOpen}
         title="Delete account"
-        message="This permanently deletes your account and all trips you own. This cannot be undone."
+        message="This permanently deletes your account and all trips you own. This cannot be undone. Enter your password to confirm."
         confirmLabel="Delete my account"
         loading={deleting}
+        confirmDisabled={!deletePassword}
         onConfirm={handleDeleteAccount}
-        onCancel={() => setDeleteOpen(false)}
-      />
+        onCancel={closeDeleteDialog}
+      >
+        {deleteError && <p className="text-xs text-red-600 mb-2">{deleteError}</p>}
+        <Input
+          type="password"
+          placeholder="Your password"
+          value={deletePassword}
+          onChange={(e) => setDeletePassword(e.target.value)}
+        />
+      </ConfirmDialog>
     </div>
   );
 }

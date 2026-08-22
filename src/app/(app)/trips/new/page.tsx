@@ -3,14 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { tripsApi, ApiError } from "@/lib/api-client";
+import { ArrowRight, X } from "lucide-react";
+import { tripsApi, stopsApi, tripActivitiesApi, ApiError } from "@/lib/api-client";
 import { Input, Textarea, Select } from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import CitySearchPanel from "@/components/CitySearchPanel";
+import ActivitySearchPanel from "@/components/ActivitySearchPanel";
 
 const CURRENCIES = ["USD", "EUR", "GBP", "JPY", "AUD", "INR", "CAD"];
 
 export default function NewTripPage() {
   const router = useRouter();
+  const [step, setStep] = useState<"details" | "suggestions">("details");
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -23,6 +27,11 @@ export default function NewTripPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
+  const [trip, setTrip] = useState<any>(null);
+  const [stops, setStops] = useState<any[]>([]);
+  const [addingCityId, setAddingCityId] = useState<string | null>(null);
+  const [addingActivityId, setAddingActivityId] = useState<string | null>(null);
+
   function update(field: string, value: string) {
     setForm((f) => ({ ...f, [field]: value }));
   }
@@ -32,7 +41,7 @@ export default function NewTripPage() {
     setErrors({});
     setLoading(true);
     try {
-      const { trip } = await tripsApi.create({
+      const { trip: created } = await tripsApi.create({
         title: form.title,
         description: form.description || undefined,
         startDate: form.startDate || undefined,
@@ -41,8 +50,8 @@ export default function NewTripPage() {
         currency: form.currency,
         coverImage: form.coverImage || undefined,
       });
-      toast.success("Trip created! Let's build your itinerary.");
-      router.push(`/trips/${trip.id}/build`);
+      setTrip(created);
+      setStep("suggestions");
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.fieldErrors.length) {
@@ -58,10 +67,97 @@ export default function NewTripPage() {
     }
   }
 
+  async function handleAddCity(city: any) {
+    setAddingCityId(city.id);
+    try {
+      const { stop } = await stopsApi.create(trip.id, { cityId: city.id });
+      setStops((prev) => [...prev, stop]);
+      toast.success(`${city.name} added`);
+    } catch {
+      toast.error("Failed to add city");
+    } finally {
+      setAddingCityId(null);
+    }
+  }
+
+  function removeStopChip(stopId: string) {
+    setStops((prev) => prev.filter((s) => s.id !== stopId));
+    stopsApi.remove(trip.id, stopId).catch(() => toast.error("Failed to remove stop"));
+  }
+
+  async function handleAddActivity(activity: any, stopId: string) {
+    setAddingActivityId(activity.id);
+    try {
+      const { activity: ta } = await tripActivitiesApi.add(trip.id, stopId, { activityId: activity.id });
+      setStops((prev) => prev.map((s) => (s.id === stopId ? { ...s, activities: [...(s.activities || []), ta] } : s)));
+      toast.success(`${activity.name} added`);
+    } catch {
+      toast.error("Failed to add activity");
+    } finally {
+      setAddingActivityId(null);
+    }
+  }
+
+  const lastStop = stops[stops.length - 1];
+
+  if (step === "suggestions" && trip) {
+    return (
+      <div className="max-w-3xl mx-auto space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-1">{trip.title}</h1>
+          <p className="text-gray-500 text-sm">Suggestions for places to visit and activities to perform — add a few now, or skip and build the full itinerary next.</p>
+        </div>
+
+        {stops.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {stops.map((s) => (
+              <span key={s.id} className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-full bg-blue-50 text-blue-700 text-sm font-medium">
+                {s.city.name}
+                <button onClick={() => removeStopChip(s.id)} className="hover:text-blue-900">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <h2 className="font-bold text-gray-900 mb-4">Select a place</h2>
+          <CitySearchPanel
+            onAdd={handleAddCity}
+            addedCityIds={stops.map((s) => s.cityId)}
+            addingCityId={addingCityId}
+          />
+        </div>
+
+        {lastStop && (
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <h2 className="font-bold text-gray-900 mb-4">Activities to perform in {lastStop.city.name}</h2>
+            <ActivitySearchPanel
+              cityId={lastStop.cityId}
+              onAdd={(activity) => handleAddActivity(activity, lastStop.id)}
+              addedActivityIds={(lastStop.activities || []).map((a: any) => a.activityId)}
+              addingActivityId={addingActivityId}
+            />
+          </div>
+        )}
+
+        <div className="flex justify-end gap-3">
+          <Button variant="outline" onClick={() => router.push("/trips")}>
+            Skip for now
+          </Button>
+          <Button onClick={() => router.push(`/trips/${trip.id}/build`)}>
+            Continue to Itinerary Builder <ArrowRight className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold text-gray-900 mb-1">Plan a New Trip</h1>
-      <p className="text-gray-500 text-sm mb-6">Give your trip a name and some basic details — you can add stops and activities next.</p>
+      <p className="text-gray-500 text-sm mb-6">Give your trip a name and some basic details — you&apos;ll pick places and activities next.</p>
 
       <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
         <Input

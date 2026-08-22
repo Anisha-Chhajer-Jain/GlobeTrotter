@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { DndContext, closestCenter, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
-import { GripVertical, MapPin, Trash2, Plus, ChevronDown, ChevronUp } from "lucide-react";
+import { DndContext, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
+import { GripVertical, MapPin, Trash2, Plus, ChevronDown, ChevronUp, Wallet } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { formatDate, dateInputValue } from "@/lib/format";
@@ -20,6 +20,7 @@ export default function SortableStopCard({
   onEditActivity,
   onDeleteActivity,
   onReorderActivities,
+  onOpenBudget,
 }: {
   stop: any;
   index: number;
@@ -29,10 +30,14 @@ export default function SortableStopCard({
   onEditActivity: (stop: any, ta: any) => void;
   onDeleteActivity: (stop: any, ta: any) => void;
   onReorderActivities: (stop: any, activityIds: string[]) => void;
+  onOpenBudget: (stop: any) => void;
 }) {
   const [expanded, setExpanded] = useState(true);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: stop.id });
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -113,9 +118,14 @@ export default function SortableStopCard({
               </SortableContext>
             </DndContext>
           )}
-          <Button variant="outline" size="sm" onClick={() => onAddActivity(stop)} className="w-full mt-1">
-            <Plus className="w-3.5 h-3.5" /> Add Activity
-          </Button>
+          <div className="flex gap-2 mt-1">
+            <Button variant="outline" size="sm" onClick={() => onAddActivity(stop)} className="flex-1">
+              <Plus className="w-3.5 h-3.5" /> Add Activity
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => onOpenBudget(stop)} className="flex-1">
+              <Wallet className="w-3.5 h-3.5" /> Budget of this section
+            </Button>
+          </div>
         </div>
       )}
     </div>

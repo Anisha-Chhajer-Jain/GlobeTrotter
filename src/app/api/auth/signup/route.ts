@@ -21,13 +21,22 @@ export async function POST(req: NextRequest) {
 
     const user = await prisma.user.create({
       data: {
-        name: data.name,
+        name: `${data.firstName} ${data.lastName}`.trim(),
+        firstName: data.firstName,
+        lastName: data.lastName,
         email: data.email.toLowerCase(),
         password: hashedPassword,
+        phone: data.phone || undefined,
+        city: data.city || undefined,
+        country: data.country || undefined,
+        bio: data.bio || undefined,
+        image: data.image || undefined,
       },
       select: {
         id: true,
         name: true,
+        firstName: true,
+        lastName: true,
         email: true,
         image: true,
         currency: true,

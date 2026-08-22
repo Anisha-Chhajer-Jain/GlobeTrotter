@@ -29,9 +29,11 @@ export async function GET(
     const { searchParams } = new URL(req.url);
     const { skip, limit } = parsePagination(searchParams);
     const category = searchParams.get("category");
+    const tripStopId = searchParams.get("tripStopId");
 
     const where: any = { tripId };
     if (category) where.category = category;
+    if (tripStopId) where.tripStopId = tripStopId;
 
     const [expenses, total] = await Promise.all([
       prisma.expense.findMany({

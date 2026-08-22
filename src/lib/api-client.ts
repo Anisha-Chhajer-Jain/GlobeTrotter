@@ -35,7 +35,8 @@ const put = <T>(path: string, data?: unknown) =>
   apiFetch<T>(path, { method: "PUT", body: data !== undefined ? JSON.stringify(data) : undefined });
 const patch = <T>(path: string, data?: unknown) =>
   apiFetch<T>(path, { method: "PATCH", body: data !== undefined ? JSON.stringify(data) : undefined });
-const del = <T>(path: string) => apiFetch<T>(path, { method: "DELETE" });
+const del = <T>(path: string, data?: unknown) =>
+  apiFetch<T>(path, { method: "DELETE", body: data !== undefined ? JSON.stringify(data) : undefined });
 
 function qs(params: Record<string, string | number | boolean | undefined | null>): string {
   const usp = new URLSearchParams();
@@ -124,16 +125,32 @@ export const dashboardApi = {
   get: () => get<any>(`/dashboard`),
 };
 
+export const adminApi = {
+  getStats: () => get<any>(`/admin/stats`),
+  getUser: (userId: string) => get<{ user: any; trips: any[] }>(`/admin/users/${userId}`),
+};
+
 export const publicTripApi = {
   get: (slug: string) => get<{ trip: any; isOwner: boolean; canEdit: boolean }>(`/public/trips/${slug}`),
   copy: (slug: string, data: any = {}) => post<{ trip: any }>(`/public/trips/${slug}/copy`, data),
+};
+
+export const communityApi = {
+  list: (params: Record<string, any> = {}) =>
+    get<{ posts: any[]; pagination: any }>(`/community/posts${qs(params)}`),
+  get: (postId: string) => get<{ post: any }>(`/community/posts/${postId}`),
+  create: (data: any) => post<{ post: any }>(`/community/posts`, data),
+  remove: (postId: string) => del<{ message: string }>(`/community/posts/${postId}`),
+  toggleLike: (postId: string) => post<{ liked: boolean; likesCount: number }>(`/community/posts/${postId}/like`),
+  addComment: (postId: string, content: string) =>
+    post<{ comment: any }>(`/community/posts/${postId}/comments`, { content }),
 };
 
 export const profileApi = {
   get: () => get<{ user: any }>(`/users/me`),
   update: (data: any) => put<{ user: any }>(`/users/me`, data),
   changePassword: (data: any) => put<{ message: string }>(`/users/me/password`, data),
-  deleteAccount: () => del<{ message: string }>(`/users/me`),
+  deleteAccount: (password: string) => del<{ message: string }>(`/users/me`, { password }),
 };
 
 export const authApi = {
@@ -141,4 +158,6 @@ export const authApi = {
   login: (data: any) => post<{ user: any }>(`/auth/login`, data),
   logout: () => post<{ message: string }>(`/auth/logout`),
   me: () => get<{ user: any }>(`/auth/me`),
+  forgotPassword: (email: string) => post<{ message: string }>(`/auth/forgot-password`, { email }),
+  resetPassword: (data: any) => post<{ message: string }>(`/auth/reset-password`, data),
 };

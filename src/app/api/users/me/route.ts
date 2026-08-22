@@ -1,8 +1,14 @@
 import { NextRequest } from "next/server";
+import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { requireAuth } from "@/lib/nextauth";
-import { handleApiError, jsonResponse } from "@/lib/errors";
+import { handleApiError, jsonResponse, AppError } from "@/lib/errors";
 import { updateProfileSchema } from "@/lib/validations";
+import { verifyPassword } from "@/lib/auth";
+
+const deleteAccountSchema = z.object({
+  password: z.string().min(1, "Password is required to delete your account"),
+});
 
 export async function GET() {
   try {
@@ -25,10 +31,13 @@ export async function PUT(req: NextRequest) {
       select: {
         id: true,
         name: true,
+        firstName: true,
+        lastName: true,
         email: true,
         image: true,
         bio: true,
         phone: true,
+        city: true,
         country: true,
         currency: true,
         createdAt: true,
@@ -43,7 +52,9 @@ export async function PUT(req: NextRequest) {
 }
 
 /**
- * Deletes the current user's account.
+ * Deletes the current user's account. Requires the account password in the
+ * request body — irreversible, so we re-verify identity beyond just having
+ * a valid session cookie, the same way a password change would.
  *
  * Trips owned by the user cascade-delete (stops, activities, expenses,
  * shares) via the schema's onDelete: Cascade rules. Expense and TripShare
@@ -51,9 +62,16 @@ export async function PUT(req: NextRequest) {
  * User, so they're removed explicitly first to avoid a foreign-key
  * violation on the final user delete.
  */
-export async function DELETE() {
+export async function DELETE(req: NextRequest) {
   try {
     const user = await requireAuth();
+    const body = await req.json().catch(() => ({}));
+    const { password } = deleteAccountSchema.parse(body);
+
+    const dbUser = await prisma.user.findUnique({ where: { id: user.id } });
+    if (!dbUser?.password || !(await verifyPassword(password, dbUser.password))) {
+      throw new AppError("Incorrect password", 401);
+    }
 
     await prisma.$transaction([
       prisma.expense.deleteMany({ where: { userId: user.id, trip: { userId: { not: user.id } } } }),

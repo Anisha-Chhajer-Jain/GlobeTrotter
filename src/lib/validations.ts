@@ -2,8 +2,14 @@ import { z } from "zod";
 import { TripStatus, ActivityType, ExpenseCategory, ShareRole } from "@prisma/client";
 
 export const registerSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters").max(100),
+  firstName: z.string().min(1, "First name is required").max(50),
+  lastName: z.string().min(1, "Last name is required").max(50),
   email: z.string().email("Invalid email address"),
+  phone: z.string().max(20).optional().nullable(),
+  city: z.string().max(100).optional().nullable(),
+  country: z.string().max(100).optional().nullable(),
+  bio: z.string().max(500).optional().nullable(),
+  image: z.string().url().optional().nullable(),
   password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -16,10 +22,29 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Invalid email address"),
+});
+
+export const resetPasswordSchema = z
+  .object({
+    email: z.string().email("Invalid email address"),
+    token: z.string().min(1, "Reset token is required"),
+    newPassword: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
 export const updateProfileSchema = z.object({
   name: z.string().min(2).max(100).optional(),
+  firstName: z.string().min(1).max(50).optional().nullable(),
+  lastName: z.string().min(1).max(50).optional().nullable(),
   bio: z.string().max(500).optional().nullable(),
   phone: z.string().max(20).optional().nullable(),
+  city: z.string().max(100).optional().nullable(),
   country: z.string().max(100).optional().nullable(),
   currency: z.string().max(3).optional(),
   image: z.string().url().optional().nullable(),
@@ -133,4 +158,22 @@ export const copyTripSchema = z.object({
   title: z.string().optional(),
   includeActivities: z.boolean().default(true),
   includeExpenses: z.boolean().default(false),
+});
+
+export const createCommunityPostSchema = z.object({
+  title: z.string().min(2, "Title must be at least 2 characters").max(200),
+  content: z.string().min(2, "Content must be at least 2 characters").max(5000),
+  imageUrl: z.string().url().optional().nullable(),
+  tripId: z.string().optional().nullable(),
+  cityId: z.string().optional().nullable(),
+});
+
+export const createCommunityCommentSchema = z.object({
+  content: z.string().min(1, "Comment cannot be empty").max(1000),
+});
+
+export const searchCommunityPostsSchema = z.object({
+  query: z.string().max(100).optional(),
+  cityId: z.string().optional(),
+  sortBy: z.enum(["recent", "popular"]).default("recent"),
 });

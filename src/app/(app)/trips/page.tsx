@@ -1,22 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Plus, Search, Map } from "lucide-react";
 import toast from "react-hot-toast";
 import { tripsApi } from "@/lib/api-client";
 import TripCard from "@/components/TripCard";
 import { LoadingSpinner, EmptyState } from "@/components/ui/Misc";
-import { Input, Select } from "@/components/ui/Input";
+import { Input } from "@/components/ui/Input";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
-
-const STATUS_OPTIONS = ["", "DRAFT", "PLANNING", "CONFIRMED", "COMPLETED", "CANCELLED"];
 
 export default function TripsPage() {
   const [trips, setTrips] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("");
   const [deleteTarget, setDeleteTarget] = useState<any>(null);
   const [deleting, setDeleting] = useState(false);
   const [copyingId, setCopyingId] = useState<string | null>(null);
@@ -24,7 +21,7 @@ export default function TripsPage() {
   async function load() {
     setLoading(true);
     try {
-      const res = await tripsApi.list({ search: search || undefined, status: status || undefined, limit: 50 });
+      const res = await tripsApi.list({ search: search || undefined, limit: 100 });
       setTrips(res.trips);
     } finally {
       setLoading(false);
@@ -35,7 +32,28 @@ export default function TripsPage() {
     const t = setTimeout(load, 300);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, status]);
+  }, [search]);
+
+  const { ongoing, upcoming, completed } = useMemo(() => {
+    const now = new Date();
+    const ongoing: any[] = [];
+    const upcoming: any[] = [];
+    const completed: any[] = [];
+
+    for (const trip of trips) {
+      const start = trip.startDate ? new Date(trip.startDate) : null;
+      const end = trip.endDate ? new Date(trip.endDate) : null;
+
+      if (trip.status === "COMPLETED" || (end && end < now)) {
+        completed.push(trip);
+      } else if (start && start <= now && (!end || end >= now)) {
+        ongoing.push(trip);
+      } else {
+        upcoming.push(trip);
+      }
+    }
+    return { ongoing, upcoming, completed };
+  }, [trips]);
 
   async function handleDelete() {
     if (!deleteTarget) return;
@@ -65,8 +83,22 @@ export default function TripsPage() {
     }
   }
 
+  function TripGroup({ title, items }: { title: string; items: any[] }) {
+    if (items.length === 0) return null;
+    return (
+      <section>
+        <h2 className="text-lg font-bold text-gray-900 mb-3">{title}</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {items.map((trip) => (
+            <TripCard key={trip.id} trip={trip} onDelete={setDeleteTarget} onCopy={handleCopy} />
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-2xl font-bold text-gray-900">My Trips</h1>
         <Link
@@ -77,18 +109,9 @@ export default function TripsPage() {
         </Link>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <Input placeholder="Search trips..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
-        </div>
-        <Select value={status} onChange={(e) => setStatus(e.target.value)} className="sm:w-48">
-          {STATUS_OPTIONS.map((s) => (
-            <option key={s} value={s}>
-              {s || "All statuses"}
-            </option>
-          ))}
-        </Select>
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <Input placeholder="Search trips..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
       </div>
 
       {loading ? (
@@ -105,10 +128,10 @@ export default function TripsPage() {
           }
         />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {trips.map((trip) => (
-            <TripCard key={trip.id} trip={trip} onDelete={setDeleteTarget} onCopy={handleCopy} />
-          ))}
+        <div className="space-y-8">
+          <TripGroup title="Ongoing" items={ongoing} />
+          <TripGroup title="Upcoming" items={upcoming} />
+          <TripGroup title="Completed" items={completed} />
         </div>
       )}
 

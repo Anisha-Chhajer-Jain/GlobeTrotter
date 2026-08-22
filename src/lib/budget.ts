@@ -1,4 +1,5 @@
 import type { Trip, TripStop, TripActivity, Expense, Activity } from "@prisma/client";
+import { convertCurrency } from "./currency";
 
 export interface TripWithDetails extends Trip {
   stops: Array<TripStop & {
@@ -36,7 +37,9 @@ export function calculateTripBudget(trip: TripWithDetails): BudgetBreakdown {
   const byDay: Record<string, number> = {};
 
   for (const expense of trip.expenses) {
-    const amount = Number(expense.amount || 0);
+    // Expenses are converted into the trip's currency before summing —
+    // otherwise a JPY entry and a USD entry would just add face values.
+    const amount = convertCurrency(Number(expense.amount || 0), expense.currency, trip.currency);
     totalSpent += amount;
     byCategory[expense.category] = (byCategory[expense.category] || 0) + amount;
     const dayKey = expense.date ? expense.date.toISOString().split("T")[0] : "unscheduled";
@@ -46,7 +49,8 @@ export function calculateTripBudget(trip: TripWithDetails): BudgetBreakdown {
   for (const stop of trip.stops) {
     let cityTotal = 0;
     for (const ta of stop.activities) {
-      const cost = Number(ta.actualCost ?? ta.activity.cost ?? 0);
+      const rawCost = Number(ta.actualCost ?? ta.activity.cost ?? 0);
+      const cost = convertCurrency(rawCost, ta.activity.currency, trip.currency);
       totalEstimated += cost;
       cityTotal += cost;
     }

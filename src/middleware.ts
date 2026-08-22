@@ -3,17 +3,39 @@ import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": process.env.NODE_ENV === "production"
-    ? (process.env.ALLOWED_ORIGINS || "*")
-    : "*",
+const BASE_CORS_HEADERS = {
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization, Accept, Accept-Language",
   "Access-Control-Allow-Credentials": "true",
   "Access-Control-Max-Age": "86400",
 };
 
-const PUBLIC_PATHS = ["/", "/login", "/signup"];
+/**
+ * In dev, allow any origin for convenience. In production, only echo back an
+ * explicitly allowlisted origin (via ALLOWED_ORIGINS, comma-separated) — a
+ * bare "*" combined with credentialed requests is both meaningless to
+ * browsers and overly permissive as a default. Same-origin calls from the
+ * app's own frontend work regardless, since CORS headers only gate
+ * cross-origin browser requests.
+ */
+function resolveCorsHeaders(requestOrigin: string | null): Record<string, string> {
+  if (process.env.NODE_ENV !== "production") {
+    return { ...BASE_CORS_HEADERS, "Access-Control-Allow-Origin": "*" };
+  }
+
+  const allowed = (process.env.ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean);
+
+  if (requestOrigin && allowed.includes(requestOrigin)) {
+    return { ...BASE_CORS_HEADERS, "Access-Control-Allow-Origin": requestOrigin, Vary: "Origin" };
+  }
+
+  return { ...BASE_CORS_HEADERS };
+}
+
+const PUBLIC_PATHS = ["/", "/login", "/signup", "/forgot-password", "/reset-password"];
 
 function isPublicPath(pathname: string): boolean {
   if (PUBLIC_PATHS.includes(pathname)) return true;
@@ -25,8 +47,10 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/api")) {
+    const corsHeaders = resolveCorsHeaders(request.headers.get("origin"));
+
     if (request.method === "OPTIONS") {
-      return new NextResponse(null, { headers: CORS_HEADERS });
+      return new NextResponse(null, { headers: corsHeaders });
     }
 
     const ip = getClientIp(request);
@@ -41,7 +65,7 @@ export async function middleware(request: NextRequest) {
         {
           status: 429,
           headers: {
-            ...CORS_HEADERS,
+            ...corsHeaders,
             "Retry-After": String(Math.ceil((limit.resetAt - Date.now()) / 1000)),
           },
         }
@@ -49,7 +73,7 @@ export async function middleware(request: NextRequest) {
     }
 
     const response = NextResponse.next();
-    Object.entries(CORS_HEADERS).forEach(([key, value]) => {
+    Object.entries(corsHeaders).forEach(([key, value]) => {
       response.headers.set(key, value);
     });
     response.headers.set("X-Content-Type-Options", "nosniff");
