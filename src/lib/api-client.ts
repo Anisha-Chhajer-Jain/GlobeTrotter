@@ -9,7 +9,7 @@ export class ApiError extends Error {
   }
 }
 
-async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+async function apiFetch<T>(path: string, options: RequestInit = {}, retries = 1): Promise<T> {
   const res = await fetch(`/api${path}`, {
     ...options,
     credentials: "include",
@@ -22,6 +22,10 @@ async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> 
   const body = await res.json().catch(() => null);
 
   if (!res.ok || !body?.success) {
+    if (retries > 0 && res.status >= 500) {
+      await new Promise((r) => setTimeout(r, 800));
+      return apiFetch<T>(path, options, retries - 1);
+    }
     throw new ApiError(body?.error || "Something went wrong", res.status, body?.fieldErrors || []);
   }
 

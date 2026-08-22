@@ -10,6 +10,7 @@ import { publicTripApi } from "@/lib/api-client";
 import { LoadingSpinner, EmptyState, Badge } from "@/components/ui/Misc";
 import Button from "@/components/ui/Button";
 import { formatDateRange, formatMoney } from "@/lib/format";
+import TripRouteMap from "@/components/itinerary/TripRouteMap";
 
 export default function PublicTripPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -58,127 +59,147 @@ export default function PublicTripPage() {
       twitter: `https://twitter.com/intent/tweet?text=${text}&url=${encodedUrl}`,
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
     };
-    window.open(shareUrls[platform], "_blank", "noopener,noreferrer,width=600,height=500");
+    window.open(shareUrls[platform], "_blank", "noopener,noreferrer");
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-100">
-        <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-primary-600 font-bold text-lg">
-            <Globe2 className="w-6 h-6" /> GlobeTrotter
-          </Link>
-          <Link href="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900">
-            Log in
-          </Link>
-        </div>
-      </header>
-
-      <main className="max-w-4xl mx-auto px-4 py-10">
-        {loading ? (
-          <LoadingSpinner label="Loading trip..." />
-        ) : !trip ? (
-          <EmptyState title="Trip not available" description="This link may be invalid or the trip is no longer public." />
-        ) : (
-          <div className="space-y-6">
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-              <Badge tone="blue">Shared Itinerary</Badge>
-              <h1 className="text-3xl font-bold text-gray-900 mt-3">{trip.title}</h1>
-              <p className="text-sm text-gray-500 mt-1">{formatDateRange(trip.startDate, trip.endDate)}</p>
-              {trip.description && <p className="text-gray-600 mt-3">{trip.description}</p>}
-              <p className="text-sm text-gray-500 mt-3">
-                Created by <span className="font-medium text-gray-700">{trip.user?.name}</span>
-              </p>
-              <div className="flex flex-wrap items-center gap-3 mt-5">
-                <Button onClick={handleCopyTrip} loading={copying}>
-                  <Copy className="w-4 h-4" /> Copy This Trip
-                </Button>
-                <div className="flex items-center gap-1.5 border-l border-gray-200 pl-3 ml-1">
-                  <button
-                    onClick={() => shareTo("whatsapp")}
-                    title="Share on WhatsApp"
-                    className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-gray-500 text-xs font-medium hover:bg-emerald-50 hover:text-emerald-600"
-                  >
-                    <MessageCircle className="w-4 h-4" /> WhatsApp
-                  </button>
-                  <button
-                    onClick={() => shareTo("twitter")}
-                    title="Share on X / Twitter"
-                    className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-gray-500 text-xs font-medium hover:bg-primary-50 hover:text-primary-600"
-                  >
-                    <Send className="w-4 h-4" /> X
-                  </button>
-                  <button
-                    onClick={() => shareTo("facebook")}
-                    title="Share on Facebook"
-                    className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-gray-500 text-xs font-medium hover:bg-primary-50 hover:text-primary-700"
-                  >
-                    <Send className="w-4 h-4" /> Facebook
-                  </button>
-                  <button onClick={copyLink} title="Copy link" className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700">
-                    <Link2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-                <Wallet className="w-5 h-5 text-primary-600" />
-                <div>
-                  <p className="text-xs text-gray-500">Budget</p>
-                  <p className="font-bold text-gray-900">{formatMoney(trip.budget, trip.currency)}</p>
-                </div>
-              </div>
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-                <MapPin className="w-5 h-5 text-primary-600" />
-                <div>
-                  <p className="text-xs text-gray-500">Stops</p>
-                  <p className="font-bold text-gray-900">{trip.stops.length}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              {trip.stops.map((stop: any, i: number) => (
-                <div key={stop.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                  <div className="flex items-center gap-3 p-4 border-b border-gray-50">
-                    <div className="w-8 h-8 rounded-full bg-primary-600 text-white text-sm font-bold flex items-center justify-center shrink-0">
-                      {i + 1}
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 flex items-center gap-1.5">
-                        <MapPin className="w-4 h-4 text-gray-400" /> {stop.city?.name}, {stop.city?.country}
-                      </h3>
-                      <p className="text-xs text-gray-500">{formatDateRange(stop.arrivalDate, stop.departureDate)}</p>
-                    </div>
-                  </div>
-                  {stop.activities.length > 0 && (
-                    <div className="p-4 space-y-2">
-                      {stop.activities.map((ta: any) => (
-                        <div key={ta.id} className="flex items-center gap-3 bg-gray-50 rounded-xl px-3 py-2.5">
-                          <div className="min-w-0 flex-1">
-                            <p className="text-sm font-semibold text-gray-900 truncate">{ta.activity.name}</p>
-                            {ta.startTime && (
-                              <span className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
-                                <Clock className="w-3 h-3" /> {ta.startTime}
-                                {ta.endTime ? ` - ${ta.endTime}` : ""}
-                              </span>
-                            )}
-                          </div>
-                          <span className="text-sm font-medium text-gray-700">
-                            {formatMoney(ta.actualCost ?? ta.activity.cost, ta.activity.currency)}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-between">
+      <div>
+        <header className="bg-white border-b border-gray-100">
+          <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2 text-primary-600 font-bold text-lg">
+              <Globe2 className="w-6 h-6" /> GlobeTrotter
+            </Link>
+            <Link href="/login" className="text-sm font-semibold text-primary-600 hover:text-primary-700">
+              Sign In
+            </Link>
           </div>
-        )}
-      </main>
+        </header>
+
+        <main className="max-w-4xl mx-auto px-4 py-8">
+          {loading ? (
+            <LoadingSpinner label="Loading trip..." />
+          ) : !trip ? (
+            <EmptyState
+              title="Trip not available"
+              description="This link may be invalid or the trip is no longer public."
+            />
+          ) : (
+            <div className="space-y-6">
+              <div className="bg-white rounded-3xl border border-gray-100 shadow-soft p-6 sm:p-8">
+                <Badge tone="blue">Shared Itinerary</Badge>
+                <h1 className="text-3xl font-extrabold text-gray-900 mt-3 font-display">
+                  {trip.title}
+                </h1>
+                <p className="text-sm text-gray-500 mt-1">
+                  {formatDateRange(trip.startDate, trip.endDate)}
+                </p>
+                {trip.description && (
+                  <p className="text-gray-600 mt-3 text-sm leading-relaxed">
+                    {trip.description}
+                  </p>
+                )}
+                <p className="text-sm text-gray-500 mt-3">
+                  Created by <span className="font-semibold text-gray-800">{trip.user?.name}</span>
+                </p>
+                <div className="flex flex-wrap items-center gap-3 mt-6">
+                  <Button onClick={handleCopyTrip} loading={copying} className="rounded-xl font-bold">
+                    <Copy className="w-4 h-4" /> Copy This Trip
+                  </Button>
+                  <div className="flex items-center gap-1.5 border-l border-gray-200 pl-3 ml-1">
+                    <button
+                      onClick={() => shareTo("whatsapp")}
+                      title="Share on WhatsApp"
+                      className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl text-gray-500 text-xs font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-colors"
+                    >
+                      <MessageCircle className="w-4 h-4" /> WhatsApp
+                    </button>
+                    <button
+                      onClick={() => shareTo("twitter")}
+                      title="Share on X / Twitter"
+                      className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl text-gray-500 text-xs font-semibold hover:bg-primary-50 hover:text-primary-600 transition-colors"
+                    >
+                      <Send className="w-4 h-4" /> X
+                    </button>
+                    <button
+                      onClick={() => shareTo("facebook")}
+                      title="Share on Facebook"
+                      className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl text-gray-500 text-xs font-semibold hover:bg-primary-50 hover:text-primary-700 transition-colors"
+                    >
+                      <Send className="w-4 h-4" /> Facebook
+                    </button>
+                    <button
+                      onClick={copyLink}
+                      title="Copy link"
+                      className="p-2 rounded-xl text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+                    >
+                      <Link2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* 🗺️ Interactive Route Map */}
+              {trip.stops?.length > 0 && (
+                <TripRouteMap stops={trip.stops} tripTitle={trip.title} />
+              )}
+
+              {/* Stops List */}
+              <div className="space-y-4">
+                {trip.stops.map((stop: any, i: number) => (
+                  <div
+                    key={stop.id}
+                    className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden"
+                  >
+                    <div className="flex items-center gap-3 p-4 border-b border-gray-50">
+                      <div className="w-8 h-8 rounded-full bg-primary-600 text-white text-sm font-bold flex items-center justify-center shrink-0">
+                        {i + 1}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-gray-900 flex items-center gap-1.5">
+                          <MapPin className="w-4 h-4 text-gray-400" /> {stop.city?.name},{" "}
+                          {stop.city?.country}
+                        </h3>
+                        <p className="text-xs text-gray-500">
+                          {formatDateRange(stop.arrivalDate, stop.departureDate)}
+                        </p>
+                      </div>
+                    </div>
+                    {stop.activities.length > 0 && (
+                      <div className="p-4 space-y-2">
+                        {stop.activities.map((ta: any) => (
+                          <div
+                            key={ta.id}
+                            className="flex items-center gap-3 bg-gray-50 rounded-xl px-3 py-2.5"
+                          >
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-semibold text-gray-900 truncate">
+                                {ta.activity.name}
+                              </p>
+                              {ta.startTime && (
+                                <span className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
+                                  <Clock className="w-3 h-3" /> {ta.startTime}
+                                  {ta.endTime ? ` - ${ta.endTime}` : ""}
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-sm font-medium text-gray-700">
+                              {formatMoney(
+                                ta.actualCost ?? ta.activity.cost,
+                                ta.activity.currency
+                              )}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 }
