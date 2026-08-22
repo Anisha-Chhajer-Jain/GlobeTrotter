@@ -183,3 +183,16 @@ export const authApi = {
   forgotPassword: (email: string) => post<{ message: string }>(`/auth/forgot-password`, { email }),
   resetPassword: (data: any) => post<{ message: string }>(`/auth/reset-password`, data),
 };
+
+export const wishlistApi = {
+  list: (params: Record<string, any> = {}) =>
+    get<{ items: any[] }>(`/wishlist${qs(params)}`),
+  create: (data: any) => post<{ item: any }>(`/wishlist`, data),
+  update: (id: string, data: any) => patch<{ item: any }>(`/wishlist/${id}`, data),
+  remove: (id: string) => del<{ success: boolean; message: string }>(`/wishlist/${id}`),
+  share: (isPublic = true) => post<{ token: string; isPublic: boolean; shareUrl: string }>(`/wishlist/share`, { isPublic }),
+};
+
+export const publicWishlistApi = {
+  get: (token: string) => get<{ user: any; items: any[] }>(`/public/wishlist/${token}`),
+};

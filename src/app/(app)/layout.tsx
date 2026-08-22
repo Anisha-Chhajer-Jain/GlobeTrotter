@@ -5,15 +5,16 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
-import { Globe2, LayoutDashboard, Map, Compass, User, LogOut, ChevronDown, Plus, ShieldCheck, Users2, CalendarDays } from "lucide-react";
+import { Globe2, LayoutDashboard, Map, Compass, User, LogOut, ChevronDown, Plus, ShieldCheck, Users2, CalendarDays, Heart } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 const NAV_LINKS = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/trips", label: "My Trips", icon: Map },
+  { href: "/wishlist", label: "Wishlist", icon: Heart },
+  { href: "/calendar", label: "Calendar", icon: CalendarDays },
   { href: "/explore/cities", label: "Explore", icon: Compass },
   { href: "/community", label: "Community", icon: Users2 },
-  { href: "/calendar", label: "Calendar", icon: CalendarDays },
 ];
 
 const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || "")

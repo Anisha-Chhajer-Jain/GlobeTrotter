@@ -27,6 +27,7 @@ import {
   Users,
   PieChart,
   Luggage,
+  Heart,
 } from "lucide-react";
 import { dashboardApi } from "@/lib/api-client";
 import {
@@ -368,23 +369,41 @@ export default function DashboardPage() {
       </div>
 
       {/* ⚡ Quick Launch Tools Ribbon */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <Link
           href="/trips/new"
           className="p-5 rounded-3xl bg-white border border-gray-100/90 shadow-soft hover:shadow-lift hover:border-teal-200 transition-all flex items-center justify-between group"
         >
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 text-white flex items-center justify-center font-bold shadow-md shadow-teal-500/25 group-hover:scale-110 transition-transform">
-              <Plus className="w-6 h-6 stroke-[2.5]" />
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 text-white flex items-center justify-center font-bold shadow-md shadow-teal-500/25 group-hover:scale-110 transition-transform">
+              <Plus className="w-5 h-5 stroke-[2.5]" />
             </div>
             <div>
-              <h4 className="text-sm font-black text-gray-900 font-display group-hover:text-primary-600 transition-colors">
-                Plan New Trip
+              <h4 className="text-xs sm:text-sm font-black text-gray-900 font-display group-hover:text-primary-600 transition-colors">
+                Plan Trip
               </h4>
-              <p className="text-xs text-gray-400 mt-0.5">Multi-city builder</p>
+              <p className="text-[11px] text-gray-400 mt-0.5">Multi-city</p>
             </div>
           </div>
-          <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-primary-600 group-hover:translate-x-1 transition-all" />
+          <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-primary-600 group-hover:translate-x-1 transition-all shrink-0" />
+        </Link>
+
+        <Link
+          href="/wishlist"
+          className="p-5 rounded-3xl bg-white border border-gray-100/90 shadow-soft hover:shadow-lift hover:border-rose-200 transition-all flex items-center justify-between group"
+        >
+          <div className="flex items-center gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 text-white flex items-center justify-center font-bold shadow-md shadow-rose-500/25 group-hover:scale-110 transition-transform">
+              <Heart className="w-5 h-5 fill-white" />
+            </div>
+            <div>
+              <h4 className="text-xs sm:text-sm font-black text-gray-900 font-display group-hover:text-rose-600 transition-colors">
+                Wishlist
+              </h4>
+              <p className="text-[11px] text-gray-400 mt-0.5">Bucket list</p>
+            </div>
+          </div>
+          <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0" />
         </Link>
 
         <Link
@@ -392,17 +411,17 @@ export default function DashboardPage() {
           className="p-5 rounded-3xl bg-white border border-gray-100/90 shadow-soft hover:shadow-lift hover:border-indigo-200 transition-all flex items-center justify-between group"
         >
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 text-white flex items-center justify-center font-bold shadow-md shadow-indigo-500/25 group-hover:scale-110 transition-transform">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 text-white flex items-center justify-center font-bold shadow-md shadow-indigo-500/25 group-hover:scale-110 transition-transform">
               <Calendar className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-sm font-black text-gray-900 font-display group-hover:text-indigo-600 transition-colors">
-                Travel Calendar
+              <h4 className="text-xs sm:text-sm font-black text-gray-900 font-display group-hover:text-indigo-600 transition-colors">
+                Calendar
               </h4>
-              <p className="text-xs text-gray-400 mt-0.5">Horizon & span bars</p>
+              <p className="text-[11px] text-gray-400 mt-0.5">Horizon bars</p>
             </div>
           </div>
-          <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
+          <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all shrink-0" />
         </Link>
 
         <Link
@@ -410,17 +429,17 @@ export default function DashboardPage() {
           className="p-5 rounded-3xl bg-white border border-gray-100/90 shadow-soft hover:shadow-lift hover:border-purple-200 transition-all flex items-center justify-between group"
         >
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 text-white flex items-center justify-center font-bold shadow-md shadow-purple-500/25 group-hover:scale-110 transition-transform">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 text-white flex items-center justify-center font-bold shadow-md shadow-purple-500/25 group-hover:scale-110 transition-transform">
               <Compass className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-sm font-black text-gray-900 font-display group-hover:text-purple-600 transition-colors">
-                Explore Cities
+              <h4 className="text-xs sm:text-sm font-black text-gray-900 font-display group-hover:text-purple-600 transition-colors">
+                Explore
               </h4>
-              <p className="text-xs text-gray-400 mt-0.5">100+ curated guides</p>
+              <p className="text-[11px] text-gray-400 mt-0.5">100+ cities</p>
             </div>
           </div>
-          <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-purple-600 group-hover:translate-x-1 transition-all" />
+          <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-purple-600 group-hover:translate-x-1 transition-all shrink-0" />
         </Link>
 
         <Link
@@ -428,17 +447,17 @@ export default function DashboardPage() {
           className="p-5 rounded-3xl bg-white border border-gray-100/90 shadow-soft hover:shadow-lift hover:border-amber-200 transition-all flex items-center justify-between group"
         >
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center font-bold shadow-md shadow-amber-500/25 group-hover:scale-110 transition-transform">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center font-bold shadow-md shadow-amber-500/25 group-hover:scale-110 transition-transform">
               <Users className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-sm font-black text-gray-900 font-display group-hover:text-amber-600 transition-colors">
-                Community Hub
+              <h4 className="text-xs sm:text-sm font-black text-gray-900 font-display group-hover:text-amber-600 transition-colors">
+                Community
               </h4>
-              <p className="text-xs text-gray-400 mt-0.5">Stories, tips & blogs</p>
+              <p className="text-[11px] text-gray-400 mt-0.5">Stories & tips</p>
             </div>
           </div>
-          <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-amber-600 group-hover:translate-x-1 transition-all" />
+          <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-amber-600 group-hover:translate-x-1 transition-all shrink-0" />
         </Link>
       </div>
 

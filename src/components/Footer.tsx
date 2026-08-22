@@ -84,6 +84,14 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/wishlist" className="hover:text-teal-400 transition-colors flex items-center gap-1.5">
+                    <span>Travel Wishlist</span>
+                    <span className="text-[9px] bg-rose-500/20 text-rose-300 font-bold px-1.5 py-0.2 rounded-full border border-rose-500/30">
+                      Bucket List
+                    </span>
+                  </Link>
+                </li>
+                <li>
                   <Link href="/calendar" className="hover:text-teal-400 transition-colors flex items-center gap-1.5">
                     <span>Travel Calendar</span>
                     <span className="text-[9px] bg-teal-500/20 text-teal-300 font-bold px-1.5 py-0.2 rounded-full border border-teal-500/30">
