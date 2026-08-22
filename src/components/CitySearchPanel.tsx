@@ -21,6 +21,7 @@ export default function CitySearchPanel({
   addingCityId?: string | null;
 }) {
   const [query, setQuery] = useState("");
+  const [country, setCountry] = useState("");
   const [sortBy, setSortBy] = useState("popularity");
   const [groupBy, setGroupBy] = useState<"" | "country">("");
   const [cities, setCities] = useState<any[]>([]);
@@ -38,7 +39,7 @@ export default function CitySearchPanel({
     const t = setTimeout(async () => {
       setLoading(true);
       try {
-        const res = await citiesApi.search({ query, sortBy, sortOrder: "desc", page: 1, limit: PAGE_SIZE });
+        const res = await citiesApi.search({ query, country: country || undefined, sortBy, sortOrder: "desc", page: 1, limit: PAGE_SIZE });
         setCities(res.cities);
         setPage(1);
         setHasMore(1 < res.pagination.pages);
@@ -50,7 +51,7 @@ export default function CitySearchPanel({
       }
     }, 300);
     return () => clearTimeout(t);
-  }, [query, sortBy]);
+  }, [query, country, sortBy]);
 
   useEffect(() => {
     if (!worldwide || !query.trim()) {
@@ -82,7 +83,7 @@ export default function CitySearchPanel({
     setLoadingMore(true);
     try {
       const nextPage = page + 1;
-      const res = await citiesApi.search({ query, sortBy, sortOrder: "desc", page: nextPage, limit: PAGE_SIZE });
+      const res = await citiesApi.search({ query, country: country || undefined, sortBy, sortOrder: "desc", page: nextPage, limit: PAGE_SIZE });
       setCities((prev) => [...prev, ...res.cities]);
       setPage(nextPage);
       setHasMore(nextPage < res.pagination.pages);
@@ -116,6 +117,12 @@ export default function CitySearchPanel({
             className="pl-9"
           />
         </div>
+        <Input
+          placeholder="Filter by country..."
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+          className="sm:w-44"
+        />
         <Select value={groupBy} onChange={(e) => setGroupBy(e.target.value as "" | "country")} className="sm:w-40">
           <option value="">No grouping</option>
           <option value="country">Group by country</option>

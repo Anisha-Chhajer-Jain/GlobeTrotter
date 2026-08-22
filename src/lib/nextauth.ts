@@ -69,13 +69,23 @@ export const authOptions: NextAuthOptions = {
       : []),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.currency = (user as any).currency;
         token.name = user.name;
         token.email = user.email;
         token.picture = user.image;
+      }
+      // Merge in fields pushed from the client via useSession().update(...) —
+      // without this, profile edits (name/photo/email/currency) only take
+      // effect after the next full login, since the JWT itself is otherwise
+      // only populated once at sign-in.
+      if (trigger === "update" && session) {
+        if (session.name !== undefined) token.name = session.name;
+        if (session.email !== undefined) token.email = session.email;
+        if (session.image !== undefined) token.picture = session.image;
+        if (session.currency !== undefined) token.currency = session.currency;
       }
       return token;
     },

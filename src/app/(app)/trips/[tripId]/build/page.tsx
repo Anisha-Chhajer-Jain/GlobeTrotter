@@ -6,7 +6,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { DndContext, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
-import { Plus, ArrowLeft, Eye, Wallet, CalendarDays, Share2 } from "lucide-react";
+import { Plus, ArrowLeft, Eye, Wallet, CalendarDays, Share2, Check, Loader2 } from "lucide-react";
 import { tripsApi, stopsApi, tripActivitiesApi } from "@/lib/api-client";
 import { LoadingSpinner, EmptyState } from "@/components/ui/Misc";
 import Button from "@/components/ui/Button";
@@ -38,6 +38,15 @@ export default function TripBuilderPage() {
   const [deleteActivityTarget, setDeleteActivityTarget] = useState<{ stop: any; ta: any } | null>(null);
   const [budgetStop, setBudgetStop] = useState<any>(null);
 
+  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
+  function markSaving() {
+    setSaveState("saving");
+  }
+  function markSaved() {
+    setSaveState("saved");
+    setTimeout(() => setSaveState((s) => (s === "saved" ? "idle" : s)), 2500);
+  }
+
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
@@ -63,12 +72,15 @@ export default function TripBuilderPage() {
 
   async function handleAddStop(city: any) {
     setAddingCityId(city.id);
+    markSaving();
     try {
       const { stop } = await stopsApi.create(tripId, { cityId: city.id });
       setTrip((t: any) => ({ ...t, stops: [...t.stops, stop] }));
       toast.success(`${city.name} added to your trip`);
+      markSaved();
     } catch {
       toast.error("Failed to add stop");
+      setSaveState("idle");
     } finally {
       setAddingCityId(null);
     }
@@ -85,22 +97,30 @@ export default function TripBuilderPage() {
     const newStops = arrayMove(previousStops, oldIndex, newIndex);
 
     setTrip((t: any) => ({ ...t, stops: newStops }));
+    markSaving();
 
-    stopsApi.reorder(tripId, newStops.map((s: any) => s.id)).catch(() => {
-      toast.error("Failed to save order — reverting");
-      setTrip((t: any) => ({ ...t, stops: previousStops }));
-    });
+    stopsApi
+      .reorder(tripId, newStops.map((s: any) => s.id))
+      .then(markSaved)
+      .catch(() => {
+        toast.error("Failed to save order — reverting");
+        setTrip((t: any) => ({ ...t, stops: previousStops }));
+        setSaveState("idle");
+      });
   }
 
   async function handleDeleteStop() {
     const stop = deleteStopTarget;
     if (!stop) return;
+    markSaving();
     try {
       await stopsApi.remove(tripId, stop.id);
       setTrip((t: any) => ({ ...t, stops: t.stops.filter((s: any) => s.id !== stop.id) }));
       toast.success("Stop removed");
+      markSaved();
     } catch {
       toast.error("Failed to remove stop");
+      setSaveState("idle");
     } finally {
       setDeleteStopTarget(null);
     }
@@ -111,19 +131,23 @@ export default function TripBuilderPage() {
       ...t,
       stops: t.stops.map((s: any) => (s.id === stop.id ? { ...s, arrivalDate, departureDate } : s)),
     }));
+    markSaving();
     try {
       await stopsApi.update(tripId, stop.id, {
         arrivalDate: arrivalDate || null,
         departureDate: departureDate || null,
       });
+      markSaved();
     } catch {
       toast.error("Failed to update dates");
+      setSaveState("idle");
     }
   }
 
   async function handleAddActivity(activity: any) {
     if (!activityStop) return;
     setAddingActivityId(activity.id);
+    markSaving();
     try {
       const { activity: ta } = await tripActivitiesApi.add(tripId, activityStop.id, { activityId: activity.id });
       setTrip((t: any) => ({
@@ -132,8 +156,10 @@ export default function TripBuilderPage() {
       }));
       setActivityStop((s: any) => (s ? { ...s, activities: [...s.activities, ta] } : s));
       toast.success(`${activity.name} added`);
+      markSaved();
     } catch {
       toast.error("Failed to add activity");
+      setSaveState("idle");
     } finally {
       setAddingActivityId(null);
     }
@@ -150,20 +176,26 @@ export default function TripBuilderPage() {
         return { ...s, activities: activityIds.map((id) => byId.get(id)) };
       }),
     }));
+    markSaving();
 
-    tripActivitiesApi.reorder(tripId, stop.id, activityIds).catch(() => {
-      toast.error("Failed to save order — reverting");
-      setTrip((t: any) => ({
-        ...t,
-        stops: t.stops.map((s: any) => (s.id === stop.id ? { ...s, activities: previousActivities } : s)),
-      }));
-    });
+    tripActivitiesApi
+      .reorder(tripId, stop.id, activityIds)
+      .then(markSaved)
+      .catch(() => {
+        toast.error("Failed to save order — reverting");
+        setTrip((t: any) => ({
+          ...t,
+          stops: t.stops.map((s: any) => (s.id === stop.id ? { ...s, activities: previousActivities } : s)),
+        }));
+        setSaveState("idle");
+      });
   }
 
   async function handleSaveActivity(data: any) {
     if (!editingActivity) return;
     const { stop, ta } = editingActivity;
     setSavingActivity(true);
+    markSaving();
     try {
       const { activity: updated } = await tripActivitiesApi.update(ta.id, data);
       setTrip((t: any) => ({
@@ -174,8 +206,10 @@ export default function TripBuilderPage() {
       }));
       toast.success("Activity updated");
       setEditingActivity(null);
+      markSaved();
     } catch {
       toast.error("Failed to update activity");
+      setSaveState("idle");
     } finally {
       setSavingActivity(false);
     }
@@ -184,6 +218,7 @@ export default function TripBuilderPage() {
   async function handleDeleteActivity() {
     if (!deleteActivityTarget) return;
     const { stop, ta } = deleteActivityTarget;
+    markSaving();
     try {
       await tripActivitiesApi.remove(ta.id);
       setTrip((t: any) => ({
@@ -191,8 +226,10 @@ export default function TripBuilderPage() {
         stops: t.stops.map((s: any) => (s.id !== stop.id ? s : { ...s, activities: s.activities.filter((a: any) => a.id !== ta.id) })),
       }));
       toast.success("Activity removed");
+      markSaved();
     } catch {
       toast.error("Failed to remove activity");
+      setSaveState("idle");
     } finally {
       setDeleteActivityTarget(null);
     }
@@ -210,7 +247,22 @@ export default function TripBuilderPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">{trip.title}</h1>
-            <p className="text-sm text-gray-500 mt-0.5">{formatDateRange(trip.startDate, trip.endDate)}</p>
+            <div className="flex items-center gap-2 mt-0.5">
+              <p className="text-sm text-gray-500">{formatDateRange(trip.startDate, trip.endDate)}</p>
+              {saveState !== "idle" && (
+                <span className={`flex items-center gap-1 text-xs font-medium ${saveState === "saved" ? "text-emerald-600" : "text-gray-400"}`}>
+                  {saveState === "saving" ? (
+                    <>
+                      <Loader2 className="w-3 h-3 animate-spin" /> Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Check className="w-3 h-3" /> Saved just now
+                    </>
+                  )}
+                </span>
+              )}
+            </div>
           </div>
           <div className="flex gap-2 flex-wrap">
             <Link href={`/trips/${tripId}`}>

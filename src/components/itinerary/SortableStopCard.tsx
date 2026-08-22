@@ -11,6 +11,15 @@ import { Input } from "@/components/ui/Input";
 import { formatDate, dateInputValue } from "@/lib/format";
 import SortableActivityRow from "./SortableActivityRow";
 
+const STOP_COLORS = [
+  { bg: "bg-blue-600", border: "border-l-blue-500" },
+  { bg: "bg-indigo-600", border: "border-l-indigo-500" },
+  { bg: "bg-amber-500", border: "border-l-amber-500" },
+  { bg: "bg-emerald-600", border: "border-l-emerald-500" },
+  { bg: "bg-pink-600", border: "border-l-pink-500" },
+  { bg: "bg-cyan-600", border: "border-l-cyan-500" },
+];
+
 export default function SortableStopCard({
   stop,
   index,
@@ -45,6 +54,8 @@ export default function SortableStopCard({
     opacity: isDragging ? 0.6 : 1,
   };
 
+  const color = STOP_COLORS[index % STOP_COLORS.length];
+
   function handleActivityDragEnd(e: DragEndEvent) {
     const { active, over } = e;
     if (!over || active.id === over.id) return;
@@ -55,12 +66,16 @@ export default function SortableStopCard({
   }
 
   return (
-    <div ref={setNodeRef} style={style} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`bg-white rounded-2xl border border-gray-100 border-l-4 ${color.border} shadow-sm overflow-hidden`}
+    >
       <div className="flex items-center gap-3 p-4">
         <button {...attributes} {...listeners} className="text-gray-300 hover:text-gray-500 cursor-grab shrink-0">
           <GripVertical className="w-5 h-5" />
         </button>
-        <div className="w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold flex items-center justify-center shrink-0">
+        <div className={`w-8 h-8 rounded-full ${color.bg} text-white text-sm font-bold flex items-center justify-center shrink-0`}>
           {index + 1}
         </div>
         {stop.city?.imageUrl && (

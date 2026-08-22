@@ -53,6 +53,12 @@ export function calculateTripBudget(trip: TripWithDetails): BudgetBreakdown {
       const cost = convertCurrency(rawCost, ta.activity.currency, trip.currency);
       totalEstimated += cost;
       cityTotal += cost;
+
+      // Activities are the main cost driver, so byDay has to include them,
+      // not just manual expenses — otherwise per-day totals/alerts miss
+      // most of the trip's actual spend.
+      const dayKey = ta.scheduledDate ? new Date(ta.scheduledDate).toISOString().split("T")[0] : "unscheduled";
+      byDay[dayKey] = (byDay[dayKey] || 0) + cost;
     }
     byCity[stop.city.name] = cityTotal;
   }

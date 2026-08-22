@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
-import { Globe2, MapPin, Clock, Share2, Copy, Wallet } from "lucide-react";
+import { Globe2, MapPin, Clock, Copy, Wallet, MessageCircle, Send, Link2 } from "lucide-react";
 import { publicTripApi } from "@/lib/api-client";
 import { LoadingSpinner, EmptyState, Badge } from "@/components/ui/Misc";
 import Button from "@/components/ui/Button";
@@ -44,14 +44,21 @@ export default function PublicTripPage() {
     }
   }
 
-  function shareLink() {
+  function copyLink() {
+    navigator.clipboard.writeText(window.location.href);
+    toast.success("Link copied to clipboard");
+  }
+
+  function shareTo(platform: "whatsapp" | "twitter" | "facebook") {
     const url = window.location.href;
-    if (navigator.share) {
-      navigator.share({ title: trip?.title, url }).catch(() => {});
-    } else {
-      navigator.clipboard.writeText(url);
-      toast.success("Link copied to clipboard");
-    }
+    const text = encodeURIComponent(`Check out my trip: ${trip?.title}`);
+    const encodedUrl = encodeURIComponent(url);
+    const shareUrls = {
+      whatsapp: `https://wa.me/?text=${text}%20${encodedUrl}`,
+      twitter: `https://twitter.com/intent/tweet?text=${text}&url=${encodedUrl}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+    };
+    window.open(shareUrls[platform], "_blank", "noopener,noreferrer,width=600,height=500");
   }
 
   return (
@@ -82,13 +89,36 @@ export default function PublicTripPage() {
               <p className="text-sm text-gray-500 mt-3">
                 Created by <span className="font-medium text-gray-700">{trip.user?.name}</span>
               </p>
-              <div className="flex gap-3 mt-5">
+              <div className="flex flex-wrap items-center gap-3 mt-5">
                 <Button onClick={handleCopyTrip} loading={copying}>
                   <Copy className="w-4 h-4" /> Copy This Trip
                 </Button>
-                <Button variant="outline" onClick={shareLink}>
-                  <Share2 className="w-4 h-4" /> Share
-                </Button>
+                <div className="flex items-center gap-1.5 border-l border-gray-200 pl-3 ml-1">
+                  <button
+                    onClick={() => shareTo("whatsapp")}
+                    title="Share on WhatsApp"
+                    className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-gray-500 text-xs font-medium hover:bg-emerald-50 hover:text-emerald-600"
+                  >
+                    <MessageCircle className="w-4 h-4" /> WhatsApp
+                  </button>
+                  <button
+                    onClick={() => shareTo("twitter")}
+                    title="Share on X / Twitter"
+                    className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-gray-500 text-xs font-medium hover:bg-blue-50 hover:text-blue-600"
+                  >
+                    <Send className="w-4 h-4" /> X
+                  </button>
+                  <button
+                    onClick={() => shareTo("facebook")}
+                    title="Share on Facebook"
+                    className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-gray-500 text-xs font-medium hover:bg-blue-50 hover:text-blue-700"
+                  >
+                    <Send className="w-4 h-4" /> Facebook
+                  </button>
+                  <button onClick={copyLink} title="Copy link" className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+                    <Link2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
 

@@ -305,9 +305,11 @@ model CommunityComment {
 }
 
 model CommunityLike {
-  id     String @id @default(uuid())
-  postId String
-  userId String
+  id        String   @id @default(uuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   post CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
   user User          @relation(fields: [userId], references: [id], onDelete: Cascade)
