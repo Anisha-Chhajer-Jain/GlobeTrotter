@@ -4,10 +4,11 @@ import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { Globe2, Mail, Lock } from "lucide-react";
+import { Mail, Lock } from "lucide-react";
 import toast from "react-hot-toast";
 import Button from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import AuthSplitLayout from "@/components/auth/AuthSplitLayout";
 
 function LoginForm() {
   const router = useRouter();
@@ -42,60 +43,50 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-blue-600 font-bold text-xl mb-6">
-            <Globe2 className="w-7 h-7" /> GlobeTrotter
-          </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
-          <p className="text-gray-500 text-sm mt-1">Log in to continue planning your adventures.</p>
+    <AuthSplitLayout title="Welcome back" subtitle="Log in to continue planning your adventures.">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {error && <div className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{error}</div>}
+        <div className="relative">
+          <Mail className="absolute left-3 top-[38px] w-4 h-4 text-gray-400" />
+          <Input
+            label="Email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            className="pl-9"
+          />
         </div>
-
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
-          {error && <div className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{error}</div>}
-          <div className="relative">
-            <Mail className="absolute left-3 top-[38px] w-4 h-4 text-gray-400" />
-            <Input
-              label="Email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="pl-9"
-            />
-          </div>
-          <div className="relative">
-            <Lock className="absolute left-3 top-[38px] w-4 h-4 text-gray-400" />
-            <Input
-              label="Password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="pl-9"
-            />
-          </div>
-          <div className="flex justify-end">
-            <Link href="/forgot-password" className="text-xs text-blue-600 hover:underline">
-              Forgot password?
-            </Link>
-          </div>
-          <Button type="submit" className="w-full" loading={loading}>
-            Log In
-          </Button>
-        </form>
-
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-blue-600 font-semibold hover:underline">
-            Sign up
+        <div className="relative">
+          <Lock className="absolute left-3 top-[38px] w-4 h-4 text-gray-400" />
+          <Input
+            label="Password"
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            className="pl-9"
+          />
+        </div>
+        <div className="flex justify-end">
+          <Link href="/forgot-password" className="text-xs text-blue-600 hover:underline">
+            Forgot password?
           </Link>
-        </p>
-      </div>
-    </div>
+        </div>
+        <Button type="submit" className="w-full" loading={loading} size="lg">
+          Log In
+        </Button>
+      </form>
+
+      <p className="text-center text-sm text-gray-500 mt-6">
+        Don&apos;t have an account?{" "}
+        <Link href="/signup" className="text-blue-600 font-semibold hover:underline">
+          Sign up
+        </Link>
+      </p>
+    </AuthSplitLayout>
   );
 }
 
