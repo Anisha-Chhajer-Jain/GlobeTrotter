@@ -5,8 +5,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { Plus, Map, Wallet, CheckCircle2, Globe2, ArrowRight, TrendingUp, Sparkles } from "lucide-react";
 import { dashboardApi } from "@/lib/api-client";
-import { StatTile, EmptyState } from "@/components/ui/Misc";
-import { LoadingSpinner } from "@/components/ui/Misc";
+import { StatTile, EmptyState, Skeleton, StatTileSkeleton, CardSkeletonGrid } from "@/components/ui/Misc";
 import TripCard from "@/components/TripCard";
 import CityCard from "@/components/CityCard";
 import { formatMoney } from "@/lib/format";
@@ -23,7 +22,22 @@ export default function DashboardPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <LoadingSpinner label="Loading your dashboard..." />;
+  if (loading) {
+    return (
+      <div className="space-y-10">
+        <Skeleton className="h-44 sm:h-52 w-full rounded-3xl" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <StatTileSkeleton key={i} />
+          ))}
+        </div>
+        <div>
+          <Skeleton className="h-6 w-40 mb-4" />
+          <CardSkeletonGrid />
+        </div>
+      </div>
+    );
+  }
   if (!data) return <EmptyState title="Couldn't load dashboard" description="Please try refreshing the page." />;
 
   const currency = data.userCurrency || "USD";

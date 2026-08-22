@@ -12,6 +12,45 @@ export function LoadingSpinner({ label }: { label?: string }) {
   );
 }
 
+export function Skeleton({ className = "" }: { className?: string }) {
+  return <div className={`animate-pulse rounded-lg bg-gray-100 ${className}`} />;
+}
+
+export function CardSkeleton() {
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <Skeleton className="h-32 w-full rounded-none" />
+      <div className="p-4 space-y-2.5">
+        <Skeleton className="h-4 w-3/4" />
+        <Skeleton className="h-3 w-1/2" />
+        <Skeleton className="h-3 w-2/3" />
+      </div>
+    </div>
+  );
+}
+
+export function CardSkeletonGrid({ count = 6 }: { count?: number }) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {Array.from({ length: count }).map((_, i) => (
+        <CardSkeleton key={i} />
+      ))}
+    </div>
+  );
+}
+
+export function StatTileSkeleton() {
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center gap-4">
+      <Skeleton className="w-11 h-11 rounded-xl shrink-0" />
+      <div className="min-w-0 flex-1 space-y-2">
+        <Skeleton className="h-3 w-16" />
+        <Skeleton className="h-5 w-20" />
+      </div>
+    </div>
+  );
+}
+
 export function EmptyState({
   icon: Icon,
   title,

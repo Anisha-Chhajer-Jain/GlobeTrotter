@@ -14,6 +14,35 @@ const STATUS_TONE: Record<string, "gray" | "blue" | "green" | "amber" | "red" | 
   CANCELLED: "red",
 };
 
+function getCountdownLabel(trip: any): string | null {
+  if (trip.status === "COMPLETED" || trip.status === "CANCELLED") return null;
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const start = trip.startDate ? new Date(trip.startDate) : null;
+  const end = trip.endDate ? new Date(trip.endDate) : null;
+  if (start) start.setHours(0, 0, 0, 0);
+  if (end) end.setHours(0, 0, 0, 0);
+
+  if (end && end < now) return null; // already over
+  const dayMs = 24 * 60 * 60 * 1000;
+
+  if (start && start > now) {
+    const days = Math.round((start.getTime() - now.getTime()) / dayMs);
+    if (days === 0) return "Starts today!";
+    if (days === 1) return "1 day to go";
+    return `${days} days to go`;
+  }
+  if (start && start <= now && (!end || end >= now)) {
+    if (end) {
+      const days = Math.round((end.getTime() - now.getTime()) / dayMs);
+      if (days <= 0) return "Last day!";
+      return `${days} day${days === 1 ? "" : "s"} left`;
+    }
+    return "Ongoing";
+  }
+  return null;
+}
+
 export default function TripCard({
   trip,
   onDelete,
@@ -37,6 +66,7 @@ export default function TripCard({
 
   const cities = trip.stops?.map((s: any) => s.city?.name).filter(Boolean) ?? [];
   const cover = trip.coverImage || trip.stops?.[0]?.city?.imageUrl;
+  const countdown = getCountdownLabel(trip);
 
   return (
     <div className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
@@ -46,6 +76,11 @@ export default function TripCard({
           <div className="absolute top-3 left-3">
             <Badge tone={STATUS_TONE[trip.status] ?? "gray"}>{trip.status}</Badge>
           </div>
+          {countdown && (
+            <div className="absolute top-3 right-3">
+              <Badge tone="amber">{countdown}</Badge>
+            </div>
+          )}
         </div>
       </Link>
       <div className="p-4 flex-1 flex flex-col">

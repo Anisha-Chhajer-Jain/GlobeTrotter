@@ -6,7 +6,7 @@ import { Plus, Search, Map } from "lucide-react";
 import toast from "react-hot-toast";
 import { tripsApi } from "@/lib/api-client";
 import TripCard from "@/components/TripCard";
-import { LoadingSpinner, EmptyState } from "@/components/ui/Misc";
+import { EmptyState, CardSkeletonGrid } from "@/components/ui/Misc";
 import { Input } from "@/components/ui/Input";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 
@@ -115,7 +115,7 @@ export default function TripsPage() {
       </div>
 
       {loading ? (
-        <LoadingSpinner label="Loading trips..." />
+        <CardSkeletonGrid count={6} />
       ) : trips.length === 0 ? (
         <EmptyState
           icon={Map}

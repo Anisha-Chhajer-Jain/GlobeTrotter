@@ -186,6 +186,32 @@ export default function TripBudgetPage() {
               </PieChart>
             </ResponsiveContainer>
           )}
+          {categoryData.length > 0 && (
+            <div className="mt-4 space-y-2.5">
+              {categoryData
+                .slice()
+                .sort((a, b) => b.value - a.value)
+                .map((c, i) => {
+                  const pct = budget.totalSpent > 0 ? Math.round((c.value / budget.totalSpent) * 100) : 0;
+                  return (
+                    <div key={c.name}>
+                      <div className="flex items-center justify-between text-xs mb-1">
+                        <span className="font-medium text-gray-700">{c.name}</span>
+                        <span className="text-gray-500">
+                          {formatMoney(c.value, budget.currency)} · {pct}%
+                        </span>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                        <div
+                          className="h-full rounded-full"
+                          style={{ width: `${pct}%`, backgroundColor: COLORS[i % COLORS.length] }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          )}
         </div>
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
           <h3 className="font-bold text-gray-900 mb-3 text-sm">Estimated Cost by City</h3>
