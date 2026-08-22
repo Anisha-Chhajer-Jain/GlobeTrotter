@@ -88,11 +88,11 @@ export function StatTile({
   tone?: "blue" | "green" | "amber" | "red" | "indigo";
 }) {
   const toneClasses: Record<string, string> = {
-    blue: "bg-blue-50 text-blue-600",
+    blue: "bg-primary-50 text-primary-700",
     green: "bg-emerald-50 text-emerald-600",
     amber: "bg-amber-50 text-amber-600",
     red: "bg-red-50 text-red-600",
-    indigo: "bg-indigo-50 text-indigo-600",
+    indigo: "bg-accent-50 text-accent-600",
   };
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center gap-4">
@@ -113,10 +113,10 @@ export function Badge({ children, tone = "gray" }: { children: ReactNode; tone?:
   const toneClasses: Record<string, string> = {
     gray: "bg-gray-100 text-gray-600",
     green: "bg-emerald-100 text-emerald-700",
-    blue: "bg-blue-100 text-blue-700",
+    blue: "bg-primary-100 text-primary-700",
     amber: "bg-amber-100 text-amber-700",
     red: "bg-red-100 text-red-700",
-    indigo: "bg-indigo-100 text-indigo-700",
+    indigo: "bg-accent-100 text-accent-700",
   };
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${toneClasses[tone]}`}>

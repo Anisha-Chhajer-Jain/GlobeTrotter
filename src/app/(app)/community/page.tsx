@@ -81,7 +81,7 @@ export default function CommunityPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Users2 className="w-6 h-6 text-blue-600" /> Community
+            <Users2 className="w-6 h-6 text-primary-600" /> Community
           </h1>
           <p className="text-gray-500 text-sm mt-1">Share your trip experiences, and discover what other travelers loved.</p>
         </div>

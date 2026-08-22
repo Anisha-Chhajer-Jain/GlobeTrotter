@@ -197,7 +197,7 @@ export default function ActivitySearchPanel({
         <button
           onClick={() => setDiscoverOpen((v) => !v)}
           className={`flex items-center gap-1.5 text-xs font-medium mb-5 px-2.5 py-1 rounded-full ${
-            discoverOpen ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-500"
+            discoverOpen ? "bg-primary-600 text-white" : "bg-gray-100 text-gray-500"
           }`}
         >
           <Compass className="w-3.5 h-3.5" /> Discover nearby
@@ -261,7 +261,7 @@ export default function ActivitySearchPanel({
           {discoverOpen && cityId && (
             <div className="mt-6 pt-5 border-t border-gray-100">
               <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-1.5">
-                <Compass className="w-4 h-4 text-blue-600" /> Discovered nearby
+                <Compass className="w-4 h-4 text-primary-600" /> Discovered nearby
               </h3>
               {liveLoading ? (
                 <LoadingSpinner label="Discovering nearby places..." />

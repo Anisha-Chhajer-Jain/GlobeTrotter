@@ -137,7 +137,7 @@ export default function CitySearchPanel({
       <button
         onClick={() => setWorldwide((v) => !v)}
         className={`flex items-center gap-1.5 text-xs font-medium mb-5 px-2.5 py-1 rounded-full ${
-          worldwide ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-500"
+          worldwide ? "bg-primary-600 text-white" : "bg-gray-100 text-gray-500"
         }`}
       >
         <Globe2 className="w-3.5 h-3.5" /> Search worldwide
@@ -200,7 +200,7 @@ export default function CitySearchPanel({
           {worldwide && query.trim() && (
             <div className="mt-6 pt-5 border-t border-gray-100">
               <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-1.5">
-                <Globe2 className="w-4 h-4 text-blue-600" /> More cities worldwide
+                <Globe2 className="w-4 h-4 text-primary-600" /> More cities worldwide
               </h3>
               {liveLoading ? (
                 <LoadingSpinner label="Searching worldwide..." />

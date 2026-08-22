@@ -111,9 +111,9 @@ export default function NewTripPage() {
         {stops.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {stops.map((s) => (
-              <span key={s.id} className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-full bg-blue-50 text-blue-700 text-sm font-medium">
+              <span key={s.id} className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-full bg-primary-50 text-primary-700 text-sm font-medium">
                 {s.city.name}
-                <button onClick={() => removeStopChip(s.id)} className="hover:text-blue-900">
+                <button onClick={() => removeStopChip(s.id)} className="hover:text-primary-900">
                   <X className="w-3.5 h-3.5" />
                 </button>
               </span>

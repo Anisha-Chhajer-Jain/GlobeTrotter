@@ -2,7 +2,7 @@ import type { InputHTMLAttributes, TextareaHTMLAttributes, SelectHTMLAttributes,
 import { cn } from "@/lib/cn";
 
 const fieldClass =
-  "w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-400";
+  "w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-shadow disabled:bg-gray-50 disabled:text-gray-400";
 
 function FieldWrapper({ label, error, htmlFor, children }: { label?: string; error?: string; htmlFor?: string; children: ReactNode }) {
   return (

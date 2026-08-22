@@ -8,7 +8,7 @@ import { LoadingSpinner } from "@/components/ui/Misc";
 import { cn } from "@/lib/cn";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const TRIP_COLORS = ["bg-blue-100 text-blue-700", "bg-indigo-100 text-indigo-700", "bg-amber-100 text-amber-700", "bg-emerald-100 text-emerald-700", "bg-pink-100 text-pink-700"];
+const TRIP_COLORS = ["bg-primary-100 text-primary-700", "bg-indigo-100 text-indigo-700", "bg-amber-100 text-amber-700", "bg-emerald-100 text-emerald-700", "bg-pink-100 text-pink-700"];
 
 function startOfMonth(d: Date) {
   return new Date(d.getFullYear(), d.getMonth(), 1);
@@ -66,7 +66,7 @@ export default function AccountCalendarPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <CalendarDays className="w-6 h-6 text-blue-600" /> Calendar View
+          <CalendarDays className="w-6 h-6 text-primary-600" /> Calendar View
         </h1>
         <p className="text-gray-500 text-sm mt-1">All your trips, plotted across the month.</p>
       </div>
@@ -113,7 +113,7 @@ export default function AccountCalendarPage() {
                 <span
                   className={cn(
                     "inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium",
-                    !inMonth ? "text-gray-300" : sameDay(day, today) ? "bg-blue-600 text-white" : "text-gray-700"
+                    !inMonth ? "text-gray-300" : sameDay(day, today) ? "bg-primary-600 text-white" : "text-gray-700"
                   )}
                 >
                   {day.getDate()}

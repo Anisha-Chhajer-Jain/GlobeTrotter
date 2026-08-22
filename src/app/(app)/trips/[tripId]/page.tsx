@@ -79,13 +79,13 @@ export default function ItineraryViewPage() {
       <div className="flex gap-2">
         <button
           onClick={() => setMode("city")}
-          className={`px-3.5 py-1.5 rounded-lg text-sm font-medium ${mode === "city" ? "bg-blue-600 text-white" : "bg-white border border-gray-200 text-gray-600"}`}
+          className={`px-3.5 py-1.5 rounded-lg text-sm font-medium ${mode === "city" ? "bg-primary-600 text-white" : "bg-white border border-gray-200 text-gray-600"}`}
         >
           By City
         </button>
         <button
           onClick={() => setMode("day")}
-          className={`px-3.5 py-1.5 rounded-lg text-sm font-medium ${mode === "day" ? "bg-blue-600 text-white" : "bg-white border border-gray-200 text-gray-600"}`}
+          className={`px-3.5 py-1.5 rounded-lg text-sm font-medium ${mode === "day" ? "bg-primary-600 text-white" : "bg-white border border-gray-200 text-gray-600"}`}
         >
           By Day
         </button>
@@ -98,7 +98,7 @@ export default function ItineraryViewPage() {
           {trip.stops.map((stop: any, i: number) => (
             <div key={stop.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="flex items-center gap-3 p-4 border-b border-gray-50">
-                <div className="w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-full bg-primary-600 text-white text-sm font-bold flex items-center justify-center shrink-0">
                   {i + 1}
                 </div>
                 <div>
@@ -177,7 +177,7 @@ export default function ItineraryViewPage() {
                   ))}
                   <div className="grid grid-cols-[1fr_auto] gap-x-4 items-center px-3 pt-3 mt-2 border-t border-gray-100">
                     <span className="text-sm font-bold text-gray-900">Day total</span>
-                    <span className="text-sm font-bold text-blue-600 whitespace-nowrap">{formatMoney(dayTotal, trip.currency)}</span>
+                    <span className="text-sm font-bold text-primary-600 whitespace-nowrap">{formatMoney(dayTotal, trip.currency)}</span>
                   </div>
                 </div>
               </div>

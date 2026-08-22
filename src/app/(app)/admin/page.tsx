@@ -80,7 +80,7 @@ export default function AdminPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <BarChart3 className="w-6 h-6 text-blue-600" /> Admin Panel
+          <BarChart3 className="w-6 h-6 text-primary-600" /> Admin Panel
         </h1>
         <p className="text-gray-500 text-sm mt-1">Platform-wide stats across every user and trip.</p>
       </div>
@@ -92,7 +92,7 @@ export default function AdminPage() {
             onClick={() => setTab(t.key)}
             className={cn(
               "flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-medium transition-colors",
-              tab === t.key ? "bg-blue-600 text-white" : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
+              tab === t.key ? "bg-primary-600 text-white" : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
             )}
           >
             <t.icon className="w-4 h-4" /> {t.label}
@@ -141,7 +141,7 @@ export default function AdminPage() {
                     {city.activityCount} activities · added to {city.timesAddedToTrips} trip{city.timesAddedToTrips === 1 ? "" : "s"}
                   </p>
                 </div>
-                <span className="text-sm font-semibold text-blue-600">{city.popularity}</span>
+                <span className="text-sm font-semibold text-primary-600">{city.popularity}</span>
               </div>
             ))}
           </div>
@@ -165,7 +165,7 @@ export default function AdminPage() {
                     </p>
                   </div>
                   <Badge tone="gray">{activity.type}</Badge>
-                  <span className="text-sm font-semibold text-blue-600 w-10 text-right">{activity.timesAddedToTrips}</span>
+                  <span className="text-sm font-semibold text-primary-600 w-10 text-right">{activity.timesAddedToTrips}</span>
                 </div>
               ))
             )}

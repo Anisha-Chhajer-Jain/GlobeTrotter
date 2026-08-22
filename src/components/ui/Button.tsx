@@ -4,12 +4,13 @@ import { Loader2 } from "lucide-react";
 import type { ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
-type Variant = "primary" | "secondary" | "outline" | "ghost" | "danger";
+type Variant = "primary" | "secondary" | "accent" | "outline" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
 
 const variantClasses: Record<Variant, string> = {
-  primary: "bg-blue-600 text-white hover:bg-blue-700 shadow-sm shadow-blue-200 disabled:bg-blue-300",
-  secondary: "bg-indigo-50 text-indigo-700 hover:bg-indigo-100 disabled:opacity-50",
+  primary: "bg-primary-600 text-white hover:bg-primary-700 shadow-sm shadow-primary-900/10 disabled:bg-primary-300",
+  secondary: "bg-primary-50 text-primary-700 hover:bg-primary-100 disabled:opacity-50",
+  accent: "bg-accent-500 text-white hover:bg-accent-600 shadow-sm shadow-accent-900/10 disabled:bg-accent-300",
   outline: "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 disabled:opacity-50",
   ghost: "bg-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-50",
   danger: "bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-50",
@@ -39,7 +40,7 @@ export default function Button({
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-2 font-semibold transition-colors whitespace-nowrap",
+        "inline-flex items-center justify-center gap-2 font-semibold transition-all duration-150 active:scale-[0.97] whitespace-nowrap",
         variantClasses[variant],
         sizeClasses[size],
         className

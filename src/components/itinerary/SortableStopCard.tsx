@@ -10,9 +10,10 @@ import Button from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { formatDate, dateInputValue } from "@/lib/format";
 import SortableActivityRow from "./SortableActivityRow";
+import WeatherBadge from "@/components/WeatherBadge";
 
 const STOP_COLORS = [
-  { bg: "bg-blue-600", border: "border-l-blue-500" },
+  { bg: "bg-primary-600", border: "border-l-primary-500" },
   { bg: "bg-indigo-600", border: "border-l-indigo-500" },
   { bg: "bg-amber-500", border: "border-l-amber-500" },
   { bg: "bg-emerald-600", border: "border-l-emerald-500" },
@@ -82,8 +83,9 @@ export default function SortableStopCard({
           <img src={stop.city.imageUrl} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0 hidden sm:block" />
         )}
         <div className="min-w-0 flex-1">
-          <h3 className="font-bold text-gray-900 flex items-center gap-1.5">
+          <h3 className="font-bold text-gray-900 flex items-center gap-1.5 flex-wrap">
             <MapPin className="w-4 h-4 text-gray-400" /> {stop.city?.name}, {stop.city?.country}
+            <WeatherBadge latitude={stop.city?.latitude} longitude={stop.city?.longitude} />
           </h3>
           <div className="flex flex-wrap items-center gap-2 mt-1.5">
             <Input

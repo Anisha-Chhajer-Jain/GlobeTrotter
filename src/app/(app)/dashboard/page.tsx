@@ -46,7 +46,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-10">
       {/* Hero */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-700">
+      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-primary-600 via-indigo-600 to-primary-700">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(255,255,255,0.18),transparent_45%),radial-gradient(circle_at_90%_90%,rgba(255,255,255,0.12),transparent_40%)]" />
         <div
           className="absolute inset-0 opacity-[0.07]"
@@ -63,11 +63,11 @@ export default function DashboardPage() {
             <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
               Welcome back, {session?.user?.name?.split(" ")[0] || "traveler"}
             </h1>
-            <p className="text-blue-100 text-sm mt-2 max-w-md">Here&apos;s what&apos;s happening across your trips.</p>
+            <p className="text-primary-100 text-sm mt-2 max-w-md">Here&apos;s what&apos;s happening across your trips.</p>
           </div>
           <Link
             href="/trips/new"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-blue-700 font-semibold text-sm hover:bg-blue-50 shadow-lg transition-colors w-fit"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-primary-700 font-semibold text-sm hover:bg-primary-50 shadow-lg transition-colors w-fit"
           >
             <Plus className="w-4 h-4" /> Plan New Trip
           </Link>
@@ -102,7 +102,7 @@ export default function DashboardPage() {
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-gray-900">Upcoming Trips</h2>
-          <Link href="/trips" className="text-sm text-blue-600 font-medium flex items-center gap-1 hover:underline">
+          <Link href="/trips" className="text-sm text-primary-600 font-medium flex items-center gap-1 hover:underline">
             View all <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -112,7 +112,7 @@ export default function DashboardPage() {
             title="No upcoming trips yet"
             description="Start planning your next adventure."
             action={
-              <Link href="/trips/new" className="mt-2 text-sm text-blue-600 font-semibold hover:underline">
+              <Link href="/trips/new" className="mt-2 text-sm text-primary-600 font-semibold hover:underline">
                 Plan a trip →
               </Link>
             }
@@ -151,9 +151,9 @@ export default function DashboardPage() {
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-blue-600" /> Recommended Destinations
+            <TrendingUp className="w-5 h-5 text-primary-600" /> Recommended Destinations
           </h2>
-          <Link href="/explore/cities" className="text-sm text-blue-600 font-medium flex items-center gap-1 hover:underline">
+          <Link href="/explore/cities" className="text-sm text-primary-600 font-medium flex items-center gap-1 hover:underline">
             Explore all <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>

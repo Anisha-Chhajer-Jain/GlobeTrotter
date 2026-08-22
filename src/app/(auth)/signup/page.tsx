@@ -84,7 +84,7 @@ export default function SignupPage() {
             {form.image ? (
               <img src={form.image} alt="" className="w-14 h-14 rounded-full object-cover shrink-0" />
             ) : (
-              <div className="w-14 h-14 rounded-full bg-blue-100 shrink-0" />
+              <div className="w-14 h-14 rounded-full bg-primary-100 shrink-0" />
             )}
             <Input
               label="Profile photo URL (optional)"
@@ -184,7 +184,7 @@ export default function SignupPage() {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Already have an account?{" "}
-          <Link href="/login" className="text-blue-600 font-semibold hover:underline">
+          <Link href="/login" className="text-primary-600 font-semibold hover:underline">
             Log in
           </Link>
         </p>

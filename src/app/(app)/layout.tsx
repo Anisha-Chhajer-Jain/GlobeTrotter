@@ -43,7 +43,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-gray-50">
       <header className="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-6">
-          <Link href="/dashboard" className="flex items-center gap-2 text-blue-600 font-bold text-lg shrink-0">
+          <Link href="/dashboard" className="flex items-center gap-2 text-primary-600 font-bold text-lg shrink-0">
             <Globe2 className="w-6 h-6" /> GlobeTrotter
           </Link>
 
@@ -56,7 +56,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                   href={link.href}
                   className={cn(
                     "flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                    active ? "bg-blue-50 text-blue-700" : "text-gray-600 hover:bg-gray-50"
+                    active ? "bg-primary-50 text-primary-700" : "text-gray-600 hover:bg-gray-50"
                   )}
                 >
                   <link.icon className="w-4 h-4" /> {link.label}
@@ -68,7 +68,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-3 shrink-0">
             <Link
               href="/trips/new"
-              className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors"
+              className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition-colors"
             >
               <Plus className="w-4 h-4" /> New Trip
             </Link>
@@ -81,7 +81,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 {session?.user?.image ? (
                   <img src={session.user.image} alt="" className="w-8 h-8 rounded-full object-cover" />
                 ) : (
-                  <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-semibold text-sm">
+                  <div className="w-8 h-8 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-semibold text-sm">
                     {session?.user?.name?.[0]?.toUpperCase() ?? "U"}
                   </div>
                 )}
@@ -116,7 +116,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 href={link.href}
                 className={cn(
                   "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap",
-                  active ? "bg-blue-50 text-blue-700" : "text-gray-600"
+                  active ? "bg-primary-50 text-primary-700" : "text-gray-600"
                 )}
               >
                 <link.icon className="w-3.5 h-3.5" /> {link.label}

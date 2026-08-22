@@ -130,7 +130,7 @@ export default function ProfilePage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-        <UserIcon className="w-6 h-6 text-blue-600" /> Profile & Settings
+        <UserIcon className="w-6 h-6 text-primary-600" /> Profile & Settings
       </h1>
 
       <form onSubmit={handleSaveProfile} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
@@ -139,7 +139,7 @@ export default function ProfilePage() {
           {user.image ? (
             <img src={user.image} alt="" className="w-16 h-16 rounded-full object-cover" />
           ) : (
-            <div className="w-16 h-16 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xl font-bold">
+            <div className="w-16 h-16 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-xl font-bold">
               {user.name?.[0]?.toUpperCase()}
             </div>
           )}
@@ -206,7 +206,7 @@ export default function ProfilePage() {
               <div key={trip.id} className="border border-gray-100 rounded-xl p-3">
                 <p className="text-sm font-semibold text-gray-900 truncate">{trip.title}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{formatDateRange(trip.startDate, trip.endDate)}</p>
-                <Link href={`/trips/${trip.id}`} className="text-xs text-blue-600 font-semibold hover:underline mt-2 inline-block">
+                <Link href={`/trips/${trip.id}`} className="text-xs text-primary-600 font-semibold hover:underline mt-2 inline-block">
                   View
                 </Link>
               </div>
@@ -225,7 +225,7 @@ export default function ProfilePage() {
               <div key={trip.id} className="border border-gray-100 rounded-xl p-3">
                 <p className="text-sm font-semibold text-gray-900 truncate">{trip.title}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{formatDateRange(trip.startDate, trip.endDate)}</p>
-                <Link href={`/trips/${trip.id}`} className="text-xs text-blue-600 font-semibold hover:underline mt-2 inline-block">
+                <Link href={`/trips/${trip.id}`} className="text-xs text-primary-600 font-semibold hover:underline mt-2 inline-block">
                   View
                 </Link>
               </div>

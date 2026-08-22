@@ -103,7 +103,7 @@ export default function TripsPage() {
         <h1 className="text-2xl font-bold text-gray-900">My Trips</h1>
         <Link
           href="/trips/new"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 shadow-sm shadow-blue-200 w-fit"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary-600 text-white font-semibold text-sm hover:bg-primary-700 shadow-sm shadow-primary-200 w-fit"
         >
           <Plus className="w-4 h-4" /> Plan New Trip
         </Link>
@@ -122,7 +122,7 @@ export default function TripsPage() {
           title="No trips found"
           description="Create your first trip to start planning."
           action={
-            <Link href="/trips/new" className="mt-2 text-sm text-blue-600 font-semibold hover:underline">
+            <Link href="/trips/new" className="mt-2 text-sm text-primary-600 font-semibold hover:underline">
               Plan a trip →
             </Link>
           }

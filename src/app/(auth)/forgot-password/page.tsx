@@ -28,10 +28,10 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-indigo-50 px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-blue-600 font-bold text-xl mb-6">
+          <Link href="/" className="inline-flex items-center gap-2 text-primary-600 font-bold text-xl mb-6">
             <Globe2 className="w-7 h-7" /> GlobeTrotter
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Reset your password</h1>

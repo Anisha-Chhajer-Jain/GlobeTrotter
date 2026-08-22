@@ -79,7 +79,7 @@ export default function CommunityPostCard({ post, onDeleted }: { post: any; onDe
           {post.user?.image ? (
             <img src={post.user.image} alt="" className="w-9 h-9 rounded-full object-cover" />
           ) : (
-            <div className="w-9 h-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm font-bold">
+            <div className="w-9 h-9 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-sm font-bold">
               {post.user?.name?.[0]?.toUpperCase() ?? "?"}
             </div>
           )}
@@ -134,7 +134,7 @@ export default function CommunityPostCard({ post, onDeleted }: { post: any; onDe
                 onChange={(e) => setCommentText(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
                 placeholder="Add a comment..."
-                className="flex-1 px-3 py-1.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-1.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
               <Button size="sm" onClick={handleAddComment} loading={posting} disabled={!commentText.trim()}>
                 <Send className="w-3.5 h-3.5" />

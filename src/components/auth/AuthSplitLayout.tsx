@@ -20,7 +20,7 @@ export default function AuthSplitLayout({
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Branding panel */}
-      <div className="hidden lg:flex relative flex-col justify-between overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-700 px-12 py-12 text-white">
+      <div className="hidden lg:flex relative flex-col justify-between overflow-hidden bg-gradient-to-br from-primary-600 via-indigo-600 to-primary-700 px-12 py-12 text-white">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.12),transparent_45%),radial-gradient(circle_at_80%_80%,rgba(255,255,255,0.10),transparent_40%)]" />
         <Link href="/" className="relative flex items-center gap-2 font-bold text-xl">
           <Globe2 className="w-7 h-7" /> GlobeTrotter
@@ -36,13 +36,13 @@ export default function AuthSplitLayout({
                 <div className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center shrink-0 mt-0.5">
                   <h.icon className="w-4 h-4" />
                 </div>
-                <p className="text-blue-50 text-sm leading-relaxed pt-1.5">{h.text}</p>
+                <p className="text-primary-50 text-sm leading-relaxed pt-1.5">{h.text}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <p className="relative flex items-center gap-1.5 text-xs text-blue-100">
+        <p className="relative flex items-center gap-1.5 text-xs text-primary-100">
           <CheckCircle2 className="w-3.5 h-3.5" /> Free to start — no credit card required
         </p>
       </div>
@@ -50,7 +50,7 @@ export default function AuthSplitLayout({
       {/* Form panel */}
       <div className="flex items-center justify-center px-4 py-12 bg-white">
         <div className="w-full max-w-md">
-          <Link href="/" className="lg:hidden inline-flex items-center gap-2 text-blue-600 font-bold text-xl mb-8">
+          <Link href="/" className="lg:hidden inline-flex items-center gap-2 text-primary-600 font-bold text-xl mb-8">
             <Globe2 className="w-7 h-7" /> GlobeTrotter
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">{title}</h1>

@@ -65,7 +65,7 @@ export default function PublicTripPage() {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-100">
         <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-blue-600 font-bold text-lg">
+          <Link href="/" className="flex items-center gap-2 text-primary-600 font-bold text-lg">
             <Globe2 className="w-6 h-6" /> GlobeTrotter
           </Link>
           <Link href="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900">
@@ -104,14 +104,14 @@ export default function PublicTripPage() {
                   <button
                     onClick={() => shareTo("twitter")}
                     title="Share on X / Twitter"
-                    className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-gray-500 text-xs font-medium hover:bg-blue-50 hover:text-blue-600"
+                    className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-gray-500 text-xs font-medium hover:bg-primary-50 hover:text-primary-600"
                   >
                     <Send className="w-4 h-4" /> X
                   </button>
                   <button
                     onClick={() => shareTo("facebook")}
                     title="Share on Facebook"
-                    className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-gray-500 text-xs font-medium hover:bg-blue-50 hover:text-blue-700"
+                    className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-gray-500 text-xs font-medium hover:bg-primary-50 hover:text-primary-700"
                   >
                     <Send className="w-4 h-4" /> Facebook
                   </button>
@@ -124,14 +124,14 @@ export default function PublicTripPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-                <Wallet className="w-5 h-5 text-blue-600" />
+                <Wallet className="w-5 h-5 text-primary-600" />
                 <div>
                   <p className="text-xs text-gray-500">Budget</p>
                   <p className="font-bold text-gray-900">{formatMoney(trip.budget, trip.currency)}</p>
                 </div>
               </div>
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-                <MapPin className="w-5 h-5 text-blue-600" />
+                <MapPin className="w-5 h-5 text-primary-600" />
                 <div>
                   <p className="text-xs text-gray-500">Stops</p>
                   <p className="font-bold text-gray-900">{trip.stops.length}</p>
@@ -143,7 +143,7 @@ export default function PublicTripPage() {
               {trip.stops.map((stop: any, i: number) => (
                 <div key={stop.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                   <div className="flex items-center gap-3 p-4 border-b border-gray-50">
-                    <div className="w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold flex items-center justify-center shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-primary-600 text-white text-sm font-bold flex items-center justify-center shrink-0">
                       {i + 1}
                     </div>
                     <div>

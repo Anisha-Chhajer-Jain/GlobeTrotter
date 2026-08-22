@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { Calendar, MapPin, MoreVertical, Pencil, Trash2, Copy } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Badge } from "@/components/ui/Misc";
@@ -69,10 +70,20 @@ export default function TripCard({
   const countdown = getCountdownLabel(trip);
 
   return (
-    <div className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
+    <motion.div
+      className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lift transition-shadow overflow-hidden flex flex-col"
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.2 }}
+    >
       <Link href={`/trips/${trip.id}`} className="block">
-        <div className="h-32 bg-gradient-to-br from-blue-100 to-indigo-100 relative overflow-hidden">
-          {cover && <img src={cover} alt={trip.title} className="w-full h-full object-cover" />}
+        <div className="h-32 bg-gradient-to-br from-primary-100 to-accent-100 relative overflow-hidden">
+          {cover && (
+            <img
+              src={cover}
+              alt={trip.title}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          )}
           <div className="absolute top-3 left-3">
             <Badge tone={STATUS_TONE[trip.status] ?? "gray"}>{trip.status}</Badge>
           </div>
@@ -86,7 +97,7 @@ export default function TripCard({
       <div className="p-4 flex-1 flex flex-col">
         <div className="flex items-start justify-between gap-2">
           <Link href={`/trips/${trip.id}`} className="min-w-0">
-            <h3 className="font-bold text-gray-900 truncate hover:text-blue-600">{trip.title}</h3>
+            <h3 className="font-bold text-gray-900 truncate hover:text-primary-600">{trip.title}</h3>
           </Link>
           {(onDelete || onCopy) && (
             <div className="relative shrink-0" ref={menuRef}>
@@ -148,6 +159,6 @@ export default function TripCard({
           </span>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
