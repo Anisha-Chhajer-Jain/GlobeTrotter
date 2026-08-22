@@ -310,8 +310,6 @@ async function main() {
     },
   });
 
-  await prisma.tripStop.deleteMany({ where: { tripId: trip1.id } });
-
   const stop1 = await prisma.tripStop.create({
     data: {
       tripId: trip1.id,

@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma";
 import { handleApiError, jsonResponse, parsePagination } from "@/lib/errors";
 import { searchCitiesSchema } from "@/lib/validations";
 import { Prisma } from "@prisma/client";
-import { MOCK_CITIES } from "@/lib/mock-data";
 
 export async function GET(req: NextRequest) {
   try {
@@ -45,48 +44,29 @@ export async function GET(req: NextRequest) {
       [validated.sortBy]: validated.sortOrder,
     };
 
-    try {
-      const [cities, total] = await Promise.all([
-        prisma.city.findMany({
-          where,
-          skip,
-          take: limit,
-          orderBy,
-          include: {
-            _count: { select: { activities: true } },
-          },
-        }),
-        prisma.city.count({ where }),
-      ]);
+    const [cities, total] = await Promise.all([
+      prisma.city.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy,
+        include: {
+          _count: { select: { activities: true } },
+        },
+      }),
+      prisma.city.count({ where }),
+    ]);
 
-      return jsonResponse({
-        cities,
-        pagination: {
-          page: Math.floor(skip / limit) + 1,
-          limit,
-          total,
-          pages: Math.ceil(total / limit),
-        },
-      });
-    } catch (dbErr) {
-      console.warn("[Cities API] DB offline, serving mock cities:", dbErr);
-      const filtered = MOCK_CITIES.filter((c) => {
-        if (!validated.query) return true;
-        const q = validated.query.toLowerCase();
-        return c.name.toLowerCase().includes(q) || c.country.toLowerCase().includes(q);
-      });
-      return jsonResponse({
-        cities: filtered,
-        pagination: {
-          page: 1,
-          limit: filtered.length,
-          total: filtered.length,
-          pages: 1,
-        },
-      });
-    }
+    return jsonResponse({
+      cities,
+      pagination: {
+        page: Math.floor(skip / limit) + 1,
+        limit,
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    });
   } catch (error) {
     return handleApiError(error);
   }
 }
-

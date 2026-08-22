@@ -9,60 +9,43 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const data = registerSchema.parse(body);
 
-    try {
-      const existingUser = await prisma.user.findUnique({
-        where: { email: data.email.toLowerCase() },
-      });
+    const existingUser = await prisma.user.findUnique({
+      where: { email: data.email.toLowerCase() },
+    });
 
-      if (existingUser) {
-        throw new AppError("User with this email already exists", 409);
-      }
+    if (existingUser) {
+      throw new AppError("User with this email already exists", 409);
+    }
 
-      const hashedPassword = await hashPassword(data.password);
+    const hashedPassword = await hashPassword(data.password);
 
-      const user = await prisma.user.create({
-        data: {
-          name: `${data.firstName} ${data.lastName}`.trim(),
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email.toLowerCase(),
-          password: hashedPassword,
-          phone: data.phone || undefined,
-          city: data.city || undefined,
-          country: data.country || undefined,
-          bio: data.bio || undefined,
-          image: data.image || undefined,
-        },
-        select: {
-          id: true,
-          name: true,
-          firstName: true,
-          lastName: true,
-          email: true,
-          image: true,
-          currency: true,
-          createdAt: true,
-        },
-      });
-
-      return jsonResponse({ user }, 201);
-    } catch (dbErr) {
-      if (dbErr instanceof AppError) throw dbErr;
-      console.warn("[Signup API] DB offline, creating mock user:", dbErr);
-      const mockUser = {
-        id: `user-${Buffer.from(data.email).toString("hex").slice(0, 12)}`,
-        name: `${data.firstName} ${data.lastName}`.trim() || data.email.split("@")[0],
+    const user = await prisma.user.create({
+      data: {
+        name: `${data.firstName} ${data.lastName}`.trim(),
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email.toLowerCase(),
-        image: data.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.email}`,
-        currency: "USD",
-        createdAt: new Date(),
-      };
-      return jsonResponse({ user: mockUser }, 201);
-    }
+        password: hashedPassword,
+        phone: data.phone || undefined,
+        city: data.city || undefined,
+        country: data.country || undefined,
+        bio: data.bio || undefined,
+        image: data.image || undefined,
+      },
+      select: {
+        id: true,
+        name: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        image: true,
+        currency: true,
+        createdAt: true,
+      },
+    });
+
+    return jsonResponse({ user }, 201);
   } catch (error) {
     return handleApiError(error);
   }
 }
-
