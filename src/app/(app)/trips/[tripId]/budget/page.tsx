@@ -6,13 +6,13 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { ArrowLeft, Plus, AlertTriangle, Pencil, Trash2 } from "lucide-react";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, CartesianGrid } from "recharts";
-import { expensesApi } from "@/lib/api-client";
+import { expensesApi, tripsApi } from "@/lib/api-client";
 import { LoadingSpinner, EmptyState, StatTile } from "@/components/ui/Misc";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { Input, Select, Textarea } from "@/components/ui/Input";
-import { formatMoney, formatDate } from "@/lib/format";
+import { formatMoney, formatDate, formatDayLabel, tripDurationDays } from "@/lib/format";
 
 const CATEGORIES = ["TRANSPORT", "ACCOMMODATION", "FOOD", "ACTIVITIES", "SHOPPING", "MISCELLANEOUS"];
 const COLORS = ["#3b82f6", "#6366f1", "#f59e0b", "#10b981", "#ec4899", "#94a3b8"];
@@ -23,6 +23,7 @@ export default function TripBudgetPage() {
   const { tripId } = useParams<{ tripId: string }>();
   const [expenses, setExpenses] = useState<any[]>([]);
   const [budget, setBudget] = useState<any>(null);
+  const [trip, setTrip] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -34,9 +35,10 @@ export default function TripBudgetPage() {
   async function load() {
     setLoading(true);
     try {
-      const res = await expensesApi.list(tripId, { limit: 100 });
-      setExpenses(res.expenses);
-      setBudget(res.budget);
+      const [expensesRes, tripRes] = await Promise.all([expensesApi.list(tripId, { limit: 100 }), tripsApi.get(tripId)]);
+      setExpenses(expensesRes.expenses);
+      setBudget(expensesRes.budget);
+      setTrip(tripRes.trip);
     } catch {
       toast.error("Failed to load budget");
     } finally {
@@ -113,6 +115,18 @@ export default function TripBudgetPage() {
   const cityData = Object.entries(budget.byCity).map(([name, value]) => ({ name, value: Number(value) }));
   const isOverBudget = budget.remaining < 0;
 
+  const dayEntries = Object.entries(budget.byDay as Record<string, number>).filter(([day]) => day !== "unscheduled");
+  const tripDays = trip ? tripDurationDays(trip.startDate, trip.endDate) : 0;
+  const totalActivity = budget.totalSpent + budget.totalEstimated;
+  const avgPerDay = tripDays > 0 ? totalActivity / tripDays : dayEntries.length > 0 ? totalActivity / dayEntries.length : 0;
+  const dailyBudgetThreshold = tripDays > 0 && budget.totalBudget > 0 ? budget.totalBudget / tripDays : null;
+  const overBudgetDays = dailyBudgetThreshold
+    ? dayEntries.filter(([, amount]) => Number(amount) > dailyBudgetThreshold).sort(([a], [b]) => a.localeCompare(b))
+    : [];
+  const dayChartData = dayEntries
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([day, value]) => ({ name: formatDate(day), value: Number(value) }));
+
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
@@ -129,10 +143,28 @@ export default function TripBudgetPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {overBudgetDays.length > 0 && (
+        <div className="bg-amber-50 border border-amber-100 text-amber-800 rounded-xl px-4 py-3 text-sm">
+          <div className="flex items-center gap-3 font-semibold mb-1.5">
+            <AlertTriangle className="w-5 h-5 shrink-0" />
+            {overBudgetDays.length} day{overBudgetDays.length === 1 ? "" : "s"} over your average daily budget
+          </div>
+          <ul className="pl-8 space-y-0.5 text-amber-700">
+            {overBudgetDays.map(([day, amount]) => (
+              <li key={day}>
+                {formatDayLabel(day)} — {formatMoney(amount, budget.currency)}
+                {dailyBudgetThreshold ? ` (budget: ${formatMoney(dailyBudgetThreshold, budget.currency)})` : ""}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         <StatTile label="Total Budget" value={formatMoney(budget.totalBudget, budget.currency)} tone="blue" />
         <StatTile label="Spent" value={formatMoney(budget.totalSpent, budget.currency)} tone="amber" />
         <StatTile label="Est. Activities" value={formatMoney(budget.totalEstimated, budget.currency)} tone="indigo" />
+        <StatTile label="Avg / Day" value={formatMoney(avgPerDay, budget.currency)} tone="indigo" />
         <StatTile label="Remaining" value={formatMoney(budget.remaining, budget.currency)} tone={isOverBudget ? "red" : "green"} />
       </div>
 
@@ -172,6 +204,25 @@ export default function TripBudgetPage() {
           )}
         </div>
       </div>
+
+      {dayChartData.length > 0 && (
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <h3 className="font-bold text-gray-900 mb-3 text-sm">Spend by Day</h3>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={dayChartData}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+              <YAxis tick={{ fontSize: 11 }} />
+              <Tooltip formatter={(v: number) => formatMoney(v, budget.currency)} />
+              <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                {dayChartData.map((d, i) => (
+                  <Cell key={i} fill={dailyBudgetThreshold && d.value > dailyBudgetThreshold ? "#ef4444" : "#3b82f6"} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
 
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold text-gray-900">Expenses</h2>

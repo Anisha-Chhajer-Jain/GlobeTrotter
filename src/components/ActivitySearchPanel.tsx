@@ -39,6 +39,8 @@ export default function ActivitySearchPanel({
 }) {
   const [query, setQuery] = useState("");
   const [type, setType] = useState("");
+  const [maxCost, setMaxCost] = useState("");
+  const [maxDuration, setMaxDuration] = useState("");
   const [sortBy, setSortBy] = useState("popularity");
   const [groupBy, setGroupBy] = useState<"" | "type">("");
   const [activities, setActivities] = useState<any[]>([]);
@@ -59,6 +61,8 @@ export default function ActivitySearchPanel({
         const res = await activitiesApi.search({
           query,
           type: type || undefined,
+          maxCost: maxCost || undefined,
+          maxDuration: maxDuration || undefined,
           cityId,
           sortBy,
           sortOrder: "desc",
@@ -76,7 +80,7 @@ export default function ActivitySearchPanel({
       }
     }, 300);
     return () => clearTimeout(t);
-  }, [query, type, cityId, sortBy]);
+  }, [query, type, maxCost, maxDuration, cityId, sortBy]);
 
   useEffect(() => {
     if (!discoverOpen || !cityId) return;
@@ -128,6 +132,8 @@ export default function ActivitySearchPanel({
       const res = await activitiesApi.search({
         query,
         type: type || undefined,
+        maxCost: maxCost || undefined,
+        maxDuration: maxDuration || undefined,
         cityId,
         sortBy,
         sortOrder: "desc",
@@ -161,6 +167,19 @@ export default function ActivitySearchPanel({
               {t.charAt(0) + t.slice(1).toLowerCase()}
             </option>
           ))}
+        </Select>
+        <Select value={maxCost} onChange={(e) => setMaxCost(e.target.value)} className="sm:w-36">
+          <option value="">Any cost</option>
+          <option value="0">Free only</option>
+          <option value="25">Under $25</option>
+          <option value="50">Under $50</option>
+          <option value="100">Under $100</option>
+        </Select>
+        <Select value={maxDuration} onChange={(e) => setMaxDuration(e.target.value)} className="sm:w-40">
+          <option value="">Any duration</option>
+          <option value="60">Under 1 hour</option>
+          <option value="180">Under 3 hours</option>
+          <option value="360">Under 6 hours</option>
         </Select>
         <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="sm:w-44">
           <option value="popularity">Most popular</option>

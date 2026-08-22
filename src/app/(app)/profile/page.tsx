@@ -66,6 +66,7 @@ export default function ProfilePage() {
         name: user.name,
         firstName: user.firstName || null,
         lastName: user.lastName || null,
+        email: user.email,
         bio: user.bio || null,
         phone: user.phone || null,
         city: user.city || null,
@@ -74,7 +75,7 @@ export default function ProfilePage() {
         image: user.image || null,
       });
       setUser(updated);
-      await updateSession({ name: updated.name, image: updated.image, currency: updated.currency });
+      await updateSession({ name: updated.name, email: updated.email, image: updated.image, currency: updated.currency });
       toast.success("Profile updated");
     } catch (err) {
       if (err instanceof ApiError && err.fieldErrors.length) {
@@ -167,7 +168,14 @@ export default function ProfilePage() {
           />
         </div>
         <Input label="Display name" required value={user.name || ""} onChange={(e) => update("name", e.target.value)} error={profileErrors.name} />
-        <Input label="Email" value={user.email} disabled />
+        <Input
+          label="Email"
+          type="email"
+          required
+          value={user.email || ""}
+          onChange={(e) => update("email", e.target.value)}
+          error={profileErrors.email}
+        />
         <Textarea label="Bio" rows={3} value={user.bio || ""} onChange={(e) => update("bio", e.target.value)} error={profileErrors.bio} />
         <div className="grid grid-cols-2 gap-4">
           <Input label="Phone" value={user.phone || ""} onChange={(e) => update("phone", e.target.value)} error={profileErrors.phone} />
