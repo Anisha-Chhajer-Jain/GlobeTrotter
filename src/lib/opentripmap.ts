@@ -23,44 +23,6 @@ export interface LivePlace {
   durationMinutes: number;
 }
 
-export interface GeoCity {
-  name: string;
-  country: string;
-  lat: number;
-  lon: number;
-  timezone?: string;
-  population?: number;
-}
-
-
-export async function geocodeCity(cityName: string): Promise<GeoCity | null> {
-  const apiKey = requireApiKey();
-  if (!cityName) return null;
-
-  try {
-    const res = await fetch(
-      `${BASE_URL}/geoname?name=${encodeURIComponent(cityName)}&apikey=${apiKey}`,
-      { next: { revalidate: 86400 } }
-    );
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (data.status !== "OK" && !data.lat) return null;
-
-    return {
-      name: data.name || cityName,
-      country: data.country || "",
-      lat: Number(data.lat),
-      lon: Number(data.lon),
-      timezone: data.timezone,
-      population: data.population,
-    };
-  } catch (error) {
-    console.warn("[OpenTripMap] geocodeCity error:", error);
-    return null;
-  }
-}
-
-
 /**
  * Maps OpenTripMap's free-text "kinds" tags to our ActivityType enum.
  */

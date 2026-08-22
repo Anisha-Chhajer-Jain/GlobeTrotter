@@ -1,49 +1,37 @@
 import { NextRequest } from "next/server";
-import { geocodeCity, searchNearbyPlaces } from "@/lib/opentripmap";
-import { handleApiError, jsonResponse } from "@/lib/errors";
+import prisma from "@/lib/prisma";
+import { handleApiError, jsonResponse, AppError } from "@/lib/errors";
+import { searchNearbyPlaces } from "@/lib/opentripmap";
 
+/**
+ * Live points-of-interest discovery via OpenTripMap, scoped to a city
+ * already in our catalog (its lat/lon anchor the search radius). Filters
+ * out places already imported as Activity rows for that city, so "Discover
+ * more" doesn't keep re-suggesting what's already addable from local data.
+ */
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const city = searchParams.get("city");
+    const cityId = searchParams.get("cityId");
     const query = searchParams.get("query") || undefined;
-    let lat = searchParams.get("lat") ? parseFloat(searchParams.get("lat")!) : null;
-    let lon = searchParams.get("lon") ? parseFloat(searchParams.get("lon")!) : null;
-    const limit = searchParams.get("limit") ? parseInt(searchParams.get("limit")!, 10) : 10;
+    if (!cityId) throw new AppError("cityId is required", 400);
 
-    let cityInfo = null;
-
-    if ((lat === null || lon === null || isNaN(lat) || isNaN(lon)) && city) {
-      cityInfo = await geocodeCity(city);
-      if (cityInfo) {
-        lat = cityInfo.lat;
-        lon = cityInfo.lon;
-      }
+    const city = await prisma.city.findUnique({ where: { id: cityId } });
+    if (!city) throw new AppError("City not found", 404);
+    if (!city.latitude || !city.longitude) {
+      return jsonResponse({ activities: [] });
     }
 
-    if (lat === null || lon === null || isNaN(lat) || isNaN(lon)) {
-      return jsonResponse({
-        places: [],
-        cityInfo: null,
-        message: "Please provide a valid city name or lat/lon coordinates.",
-      });
-    }
+    const [places, existing] = await Promise.all([
+      searchNearbyPlaces({ lat: Number(city.latitude), lon: Number(city.longitude), query }),
+      prisma.activity.findMany({ where: { cityId }, select: { externalId: true } }),
+    ]);
 
-    const places = await searchNearbyPlaces({
-      lat,
-      lon,
-      query,
-      limit,
-      radiusMeters: 20000,
-    });
+    const importedXids = new Set(existing.map((a) => a.externalId).filter(Boolean));
+    const fresh = places.filter((p) => !importedXids.has(p.xid));
 
-    return jsonResponse({
-      places,
-      cityInfo: cityInfo || { lat, lon },
-      total: places.length,
-    });
+    return jsonResponse({ activities: fresh });
   } catch (error) {
     return handleApiError(error);
   }
 }
-

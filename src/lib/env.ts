@@ -11,6 +11,8 @@ const envSchema = z.object({
   NEXTAUTH_URL: z.string().min(1).optional(),
   ALLOWED_ORIGINS: z.string().optional(),
   ADMIN_EMAILS: z.string().optional(),
+  OPENTRIPMAP_API_KEY: z.string().optional(),
+  RAPIDAPI_KEY: z.string().optional(),
 });
 
 function loadEnv() {

@@ -177,3 +177,29 @@ export const searchCommunityPostsSchema = z.object({
   cityId: z.string().optional(),
   sortBy: z.enum(["recent", "popular"]).default("recent"),
 });
+
+export const importCitySchema = z.object({
+  geoDbId: z.string().min(1),
+  name: z.string().min(1),
+  country: z.string().min(1),
+  region: z.string().optional().nullable(),
+  latitude: z.number(),
+  longitude: z.number(),
+  population: z.number().optional().nullable(),
+  timezone: z.string().optional().nullable(),
+});
+
+export const importActivitySchema = z.object({
+  cityId: z.string().min(1),
+  xid: z.string().min(1),
+  name: z.string().min(1),
+  description: z.string().optional().nullable(),
+  type: z.nativeEnum(ActivityType),
+  rating: z.number().optional().nullable(),
+  latitude: z.number().optional().nullable(),
+  longitude: z.number().optional().nullable(),
+  imageUrl: z.string().url().optional().nullable(),
+  address: z.string().optional().nullable(),
+  costEstimate: z.number().optional().nullable(),
+  durationMinutes: z.number().optional().nullable(),
+});

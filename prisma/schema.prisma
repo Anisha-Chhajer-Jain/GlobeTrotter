@@ -145,6 +145,8 @@ model City {
   language      String?
   popularity    Int       @default(0)
   costIndex     Int       @default(100)
+  // Dedup key when importing from the GeoDB Cities API — null for seeded/manual cities.
+  externalId    String?   @unique
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -190,6 +192,8 @@ model Activity {
   imageUrl      String?
   rating        Decimal?     @db.Decimal(2, 1)
   popularity    Int          @default(0)
+  // Dedup key when importing from the OpenTripMap API (their "xid") — null for seeded/manual activities.
+  externalId    String?      @unique
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 

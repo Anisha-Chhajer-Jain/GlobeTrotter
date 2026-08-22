@@ -14,6 +14,9 @@ export class AppError extends Error {
   }
 }
 
+/** Thrown by external API clients (OpenTripMap, GeoDB) when their key isn't configured. */
+export class ExternalApiError extends Error {}
+
 /**
  * Standard success envelope: { success: true, data }.
  */
@@ -45,6 +48,10 @@ export function handleApiError(error: unknown): NextResponse {
 
   if (error instanceof AppError) {
     return errorResponse(error.message, error.statusCode);
+  }
+
+  if (error instanceof ExternalApiError) {
+    return errorResponse(error.message, 503);
   }
 
   if (error instanceof ZodError) {

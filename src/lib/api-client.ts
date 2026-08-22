@@ -91,6 +91,16 @@ export const activitiesApi = {
   get: (activityId: string) => get<{ activity: any }>(`/activities/${activityId}`),
 };
 
+export const liveCitiesApi = {
+  search: (query: string) => get<{ cities: any[] }>(`/cities/live${qs({ query })}`),
+  import: (data: any) => post<{ city: any }>(`/cities/live/import`, data),
+};
+
+export const liveActivitiesApi = {
+  search: (cityId: string, query?: string) => get<{ activities: any[] }>(`/activities/live${qs({ cityId, query })}`),
+  import: (data: any) => post<{ activity: any }>(`/activities/live/import`, data),
+};
+
 export const expensesApi = {
   list: (tripId: string, params: Record<string, any> = {}) =>
     get<{ expenses: any[]; budget: any; pagination: any }>(`/trips/${tripId}/expenses${qs(params)}`),
