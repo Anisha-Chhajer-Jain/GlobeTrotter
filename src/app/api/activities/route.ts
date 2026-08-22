@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { handleApiError, jsonResponse, parsePagination } from "@/lib/errors";
 import { searchActivitiesSchema } from "@/lib/validations";
 import { Prisma } from "@prisma/client";
+import { MOCK_ACTIVITIES } from "@/lib/mock-data";
 
 export async function GET(req: NextRequest) {
   try {
@@ -58,36 +59,59 @@ export async function GET(req: NextRequest) {
         orderBy = { popularity: validated.sortOrder };
     }
 
-    const [activities, total] = await Promise.all([
-      prisma.activity.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy,
-        include: {
-          city: { select: { id: true, name: true, country: true, imageUrl: true } },
+    try {
+      const [activities, total] = await Promise.all([
+        prisma.activity.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy,
+          include: {
+            city: { select: { id: true, name: true, country: true, imageUrl: true } },
+          },
+        }),
+        prisma.activity.count({ where }),
+      ]);
+
+      const types = await prisma.activity.groupBy({
+        by: ["type"],
+        _count: { type: true },
+        orderBy: { _count: { type: "desc" } },
+      });
+
+      return jsonResponse({
+        activities,
+        types: types.map((t) => ({ type: t.type, count: t._count.type })),
+        pagination: {
+          page: Math.floor(skip / limit) + 1,
+          limit,
+          total,
+          pages: Math.ceil(total / limit),
         },
-      }),
-      prisma.activity.count({ where }),
-    ]);
-
-    const types = await prisma.activity.groupBy({
-      by: ["type"],
-      _count: { type: true },
-      orderBy: { _count: { type: "desc" } },
-    });
-
-    return jsonResponse({
-      activities,
-      types: types.map((t) => ({ type: t.type, count: t._count.type })),
-      pagination: {
-        page: Math.floor(skip / limit) + 1,
-        limit,
-        total,
-        pages: Math.ceil(total / limit),
-      },
-    });
+      });
+    } catch (dbErr) {
+      console.warn("[Activities API] DB offline, serving mock activities:", dbErr);
+      const filtered = MOCK_ACTIVITIES.filter((a) => {
+        if (!validated.query) return true;
+        const q = validated.query.toLowerCase();
+        return a.name.toLowerCase().includes(q) || (a.description && a.description.toLowerCase().includes(q));
+      });
+      return jsonResponse({
+        activities: filtered,
+        types: [
+          { type: "SIGHTSEEING", count: 3 },
+          { type: "CULTURE", count: 2 },
+        ],
+        pagination: {
+          page: 1,
+          limit: filtered.length,
+          total: filtered.length,
+          pages: 1,
+        },
+      });
+    }
   } catch (error) {
     return handleApiError(error);
   }
 }
+
