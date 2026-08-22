@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+dist
+.env
+.env.local
+.env.production
+prisma/db.sqlite
+*.log
+.DS_Store
+*.tsbuildinfo
