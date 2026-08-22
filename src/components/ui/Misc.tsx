@@ -1,7 +1,8 @@
 "use client";
 
 import { Loader2, type LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import React, { type ReactNode } from "react";
+import Link from "next/link";
 
 export function LoadingSpinner({ label }: { label?: string }) {
   return (
@@ -50,9 +51,6 @@ export function StatTileSkeleton() {
     </div>
   );
 }
-
-import Link from "next/link";
-import React, { type ReactNode } from "react";
 
 export function EmptyState({
   icon: Icon,

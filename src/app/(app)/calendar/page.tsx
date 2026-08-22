@@ -1014,7 +1014,7 @@ export default function AccountCalendarPage() {
                   Year Horizon • {month.getFullYear()}
                 </h2>
                 <p className="text-xs text-gray-500 mt-1">
-                  Bird's eye view of all 12 months. Click any month to zoom into its detailed calendar.
+                  Bird&apos;s eye view of all 12 months. Click any month to zoom into its detailed calendar.
                 </p>
               </div>
               <div className="flex items-center gap-2">

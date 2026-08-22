@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { ArrowRight, X } from "lucide-react";
@@ -13,6 +13,14 @@ import ActivitySearchPanel from "@/components/ActivitySearchPanel";
 const CURRENCIES = ["USD", "EUR", "GBP", "JPY", "AUD", "INR", "CAD"];
 
 export default function NewTripPage() {
+  return (
+    <Suspense fallback={null}>
+      <NewTripForm />
+    </Suspense>
+  );
+}
+
+function NewTripForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [step, setStep] = useState<"details" | "suggestions">("details");
