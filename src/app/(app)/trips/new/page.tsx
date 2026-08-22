@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { ArrowRight, X } from "lucide-react";
 import { tripsApi, stopsApi, tripActivitiesApi, ApiError } from "@/lib/api-client";
@@ -14,12 +14,13 @@ const CURRENCIES = ["USD", "EUR", "GBP", "JPY", "AUD", "INR", "CAD"];
 
 export default function NewTripPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [step, setStep] = useState<"details" | "suggestions">("details");
   const [form, setForm] = useState({
     title: "",
     description: "",
-    startDate: "",
-    endDate: "",
+    startDate: searchParams?.get("startDate") || "",
+    endDate: searchParams?.get("endDate") || "",
     budget: "",
     currency: "USD",
     coverImage: "",
