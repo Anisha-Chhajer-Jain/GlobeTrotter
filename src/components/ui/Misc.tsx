@@ -51,6 +51,9 @@ export function StatTileSkeleton() {
   );
 }
 
+import Link from "next/link";
+import React, { type ReactNode } from "react";
+
 export function EmptyState({
   icon: Icon,
   title,
@@ -60,8 +63,44 @@ export function EmptyState({
   icon?: LucideIcon;
   title: string;
   description?: string;
-  action?: ReactNode;
+  action?:
+    | ReactNode
+    | {
+        label: string;
+        onClick?: () => void;
+        href?: string;
+      };
 }) {
+  let actionElement: ReactNode = null;
+
+  if (action) {
+    if (React.isValidElement(action) || typeof action === "string" || typeof action === "number") {
+      actionElement = action;
+    } else if (typeof action === "object" && "label" in action) {
+      const act = action as { label: string; onClick?: () => void; href?: string };
+      if (act.href) {
+        actionElement = (
+          <Link
+            href={act.href}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-xl transition-all shadow-sm"
+          >
+            {act.label}
+          </Link>
+        );
+      } else {
+        actionElement = (
+          <button
+            type="button"
+            onClick={act.onClick}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-xl transition-all shadow-sm cursor-pointer"
+          >
+            {act.label}
+          </button>
+        );
+      }
+    }
+  }
+
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-16 px-6 text-center">
       {Icon && (
@@ -71,7 +110,7 @@ export function EmptyState({
       )}
       <h3 className="text-base font-semibold text-gray-900">{title}</h3>
       {description && <p className="text-sm text-gray-500 max-w-sm">{description}</p>}
-      {action}
+      {actionElement}
     </div>
   );
 }

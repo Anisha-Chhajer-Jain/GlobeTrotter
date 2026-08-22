@@ -24,12 +24,14 @@ import {
   ChevronRight,
   SunMedium,
   Luggage,
+  FileText,
 } from "lucide-react";
 import { tripsApi } from "@/lib/api-client";
 import { LoadingSpinner, EmptyState, Badge } from "@/components/ui/Misc";
 import Button from "@/components/ui/Button";
 import WeatherBadge from "@/components/WeatherBadge";
 import TripRouteMap from "@/components/itinerary/TripRouteMap";
+import TripExportReportModal from "@/components/itinerary/TripExportReportModal";
 import { formatDateRange, formatDate, formatMoney, tripDurationDays } from "@/lib/format";
 import { convertCurrency } from "@/lib/currency";
 import { cn } from "@/lib/cn";
@@ -39,6 +41,7 @@ export default function ItineraryViewPage() {
   const [trip, setTrip] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<"map" | "city" | "day">("map");
+  const [showExportModal, setShowExportModal] = useState(false);
 
   useEffect(() => {
     tripsApi
@@ -84,15 +87,16 @@ export default function ItineraryViewPage() {
   const cover = trip.coverImage || trip.stops?.[0]?.city?.imageUrl;
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-20">
-      {/* Top Back Link */}
-      <Link
-        href="/trips"
-        className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-gray-500 hover:text-primary-600 transition-colors group"
-      >
-        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-        <span>Back to My Trips</span>
-      </Link>
+    <>
+      <div className="max-w-6xl mx-auto space-y-8 pb-20 print-hide">
+        {/* Top Back Link */}
+        <Link
+          href="/trips"
+          className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-gray-500 hover:text-primary-600 transition-colors group"
+        >
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          <span>Back to My Trips</span>
+        </Link>
 
       {/* 🌟 Signature Itinerary Hero Banner */}
       <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-primary-600 via-indigo-600 to-primary-700 text-white shadow-lift border border-white/10">
@@ -180,6 +184,15 @@ export default function ItineraryViewPage() {
                   <Share2 className="w-3.5 h-3.5 text-rose-200" /> Share
                 </Button>
               </Link>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowExportModal(true)}
+                className="bg-teal-400 text-teal-950 hover:bg-teal-300 border-none rounded-xl font-bold shadow-md shadow-teal-950/20"
+              >
+                <FileText className="w-3.5 h-3.5" /> Export Report
+              </Button>
             </div>
           </div>
 
@@ -477,6 +490,14 @@ export default function ItineraryViewPage() {
           })}
         </div>
       )}
-    </div>
+      </div>
+
+      {/* 📄 Full Day-by-Day Export Report & Dossier Modal */}
+      <TripExportReportModal
+        trip={trip}
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+      />
+    </>
   );
 }

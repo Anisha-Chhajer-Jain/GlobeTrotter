@@ -54,10 +54,17 @@ export async function middleware(request: NextRequest) {
     }
 
     const ip = getClientIp(request);
-    const isAuthEndpoint = pathname.startsWith("/api/auth") || pathname === "/api/users/me/password";
-    const limit = isAuthEndpoint
-      ? rateLimit(`auth:${ip}`, 10, 60_000) // 10 req/min for auth-sensitive endpoints
-      : rateLimit(`api:${ip}`, 120, 60_000); // 120 req/min general API traffic
+    const isStrictAuthEndpoint =
+      pathname === "/api/auth/callback/credentials" ||
+      pathname === "/api/auth/signup" ||
+      pathname === "/api/users/me/password";
+
+    const isDev = process.env.NODE_ENV !== "production";
+    const limit = isDev
+      ? { allowed: true, remaining: 1000, resetAt: Date.now() + 60_000 }
+      : isStrictAuthEndpoint
+      ? rateLimit(`auth_strict:${ip}`, 20, 60_000)
+      : rateLimit(`api:${ip}`, 300, 60_000);
 
     if (!limit.allowed) {
       return NextResponse.json(

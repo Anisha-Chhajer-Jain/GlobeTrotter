@@ -246,7 +246,7 @@ export default function TripCard({
           </div>
         </div>
 
-        {/* Bottom Bar: Stops, Budget & Hover Action */}
+        {/* Bottom Bar: Stops, Budget & Smooth Interactive Arrow */}
         <div className="pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
           <div className="flex items-center gap-1.5 text-gray-500 font-semibold">
             <Compass className="w-3.5 h-3.5 text-gray-400" />
@@ -256,19 +256,15 @@ export default function TripCard({
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="font-bold text-gray-900 bg-gray-50 px-2.5 py-1 rounded-xl border border-gray-200/60">
+            <span className="font-bold text-gray-900 bg-gray-50 px-2.5 py-1 rounded-xl border border-gray-200/60 transition-colors group-hover:border-primary-200 group-hover:bg-primary-50/40">
               {trip.budget > 0
                 ? formatMoney(trip.budget, trip.currency || "USD")
                 : "No budget"}
             </span>
 
-            <Link
-              href={`/trips/${trip.id}`}
-              className="hidden group-hover:inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-primary-600 text-white font-bold text-xs transition-all shadow-xs"
-            >
-              <span>Explore</span>
-              <ArrowRight className="w-3 h-3" />
-            </Link>
+            <div className="w-7 h-7 rounded-xl bg-gray-50 group-hover:bg-primary-600 text-gray-400 group-hover:text-white flex items-center justify-center transition-all duration-200 shadow-2xs">
+              <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" />
+            </div>
           </div>
         </div>
       </div>
