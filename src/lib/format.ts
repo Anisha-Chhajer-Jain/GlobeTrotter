@@ -1,13 +1,13 @@
-export function formatMoney(amount: number | string, currency: string = "USD"): string {
+export function formatMoney(amount: number | string, currency: string = "INR"): string {
   const value = typeof amount === "string" ? parseFloat(amount) : amount;
   try {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency,
-      maximumFractionDigits: 2,
+      maximumFractionDigits: 0,
     }).format(value || 0);
   } catch {
-    return `${currency} ${(value || 0).toFixed(2)}`;
+    return `₹${(value || 0).toFixed(0)}`;
   }
 }
 
