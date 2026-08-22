@@ -310,6 +310,10 @@ async function main() {
     },
   });
 
+  // Re-running the seed against an already-seeded DB would otherwise hit the
+  // unique (tripId, orderIndex) constraint on the demo trip's stops.
+  await prisma.tripStop.deleteMany({ where: { tripId: trip1.id } });
+
   const stop1 = await prisma.tripStop.create({
     data: {
       tripId: trip1.id,
